@@ -27,12 +27,5 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Build changed Lean files
-        run: |
-          CHANGED=$(git diff --name-only HEAD^ HEAD -- '*.lean' | sed 's/\.lean$//')
-          if [ -z "$CHANGED" ]; then
-            echo "No .lean files changed in this push."
-          else
-            echo "Building: $CHANGED"
-            lake build $CHANGED
-          fi
+      - name: Build all Lean modules
+        run: lake build
