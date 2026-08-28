@@ -3,7 +3,6 @@ name: Build ACI Library
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   build:
@@ -18,8 +17,7 @@ jobs:
           curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y
           echo "$HOME/.elan/bin" >> $GITHUB_PATH
 
-      - name: Cache Mathlib
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
         with:
           path: .lake
           key: Linux-lake-${{ hashFiles('lake-manifest.json') }}
@@ -27,5 +25,151 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Build all Lean modules
-        run: lake build
+      - name: Verify expected module list matches disk
+        run: |
+          cat > /tmp/expected_modules.txt << 'MODLIST'
+          AM10
+          AWM21
+          AWMCore
+          AbstractAlgebra
+          AcousticsWaves
+          AdditiveNumberTheory
+          AlgebraicGeometry
+          AlgebraicTopology
+          AnalyticNumberTheory
+          AntaresCategory
+          ArithmeticGeometry
+          AtomicMolecularPhysics
+          BioinformaticsTheory
+          CategoryTheoryAdvanced
+          CodingTheory
+          Combinatorics
+          ComplexAnalysis
+          CompressedSensing
+          ComputationalComplexity
+          CondensedMatterPhysics
+          ConformalFieldTheory
+          ContactGeometry
+          ControlTheory
+          ControlTheoryAdvanced
+          ConvexAnalysis
+          CryptographyTheory
+          DifferentialGeometry
+          DiscreteMathematics
+          DynamicalSystems
+          EnergyDomain
+          ErgodicTheory
+          FSI
+          FluidDynamics
+          FormalLanguageTheory
+          FunctionalAnalysis
+          FunctionalEquations
+          GameTheory
+          GeneralRelativity
+          Governor
+          GraphTheory
+          HarmonicAnalysis
+          HomologicalAlgebra
+          InformationGeometry
+          InformationTheoryAdvanced
+          IntegralEquations
+          LieTheory
+          LinearAlgebra
+          LogicModelTheory
+          MC2Engine
+          Main
+          Manifold21
+          MathematicalBiology
+          MathematicalChemistry
+          MathematicalEconomics
+          Matrix7
+          MeasureTheory
+          MoruzinLaw
+          MotivicCohomology
+          MyMathlibProject
+          MyProject
+          N7Spine
+          NoncommutativeGeometry
+          NuclearPhysics
+          NumberTheory
+          NumberTheoryCore
+          NumericalAnalysis
+          OperatorTheory
+          Optics
+          OptimalControl
+          OptimalTransport
+          OptimizationTheory
+          Optimus7
+          Optimus7Quantum
+          OrderTheory
+          PartialDifferentialEquations
+          PhaseTransitions
+          PhysicsCore
+          PlasmaPhysics
+          PrimeMasterEngine
+          ProbabilityTheory
+          QuantumCore
+          QuantumErrorCorrection
+          QuantumFieldTheory
+          QuantumGravity
+          QuantumInformation
+          RenormalizationGroup
+          RepresentationTheory
+          SetTheory
+          SignalProcessing
+          SovereignHamiltonian
+          SpineLanguage
+          StatisticalMechanics
+          StochasticDifferentialEquations
+          StringTheory
+          SymplecticTopology
+          Synaptic_Weights
+          Thermodynamics
+          TopologicalDataAnalysis
+          TopologyAdvanced
+          TropicalGeometry
+          UniversalAlgebra
+          VariationalCalculus
+          VerifyBridge
+          VerifyState
+          WaveletAnalysis
+          MODLIST
+          ls *.lean 2>/dev/null | sed 's/\.lean$//' | sort > /tmp/actual_modules.txt
+          sort /tmp/expected_modules.txt -o /tmp/expected_modules.txt
+          echo "Expected count: $(wc -l < /tmp/expected_modules.txt)"
+          echo "Actual .lean files on disk: $(wc -l < /tmp/actual_modules.txt)"
+          echo "--- In expected list but missing from disk ---"
+          comm -23 /tmp/expected_modules.txt /tmp/actual_modules.txt || true
+          echo "--- On disk but not in expected list (new/unregistered) ---"
+          comm -13 /tmp/expected_modules.txt /tmp/actual_modules.txt || true
+
+      - name: Build every Lean module found on disk
+        run: |
+          set +e
+          FAIL=0
+          FAILED_LIST=""
+          PASSED_COUNT=0
+          TOTAL_COUNT=0
+          for f in *.lean; do
+            target="${f%.lean}"
+            TOTAL_COUNT=$((TOTAL_COUNT+1))
+            echo "::group::Building $target"
+            lake build "$target"
+            status=$?
+            echo "::endgroup::"
+            if [ $status -ne 0 ]; then
+              echo "FAILED: $target"
+              FAILED_LIST="$FAILED_LIST $target"
+              FAIL=1
+            else
+              echo "PASSED: $target"
+              PASSED_COUNT=$((PASSED_COUNT+1))
+            fi
+          done
+          echo "----------------------------------------"
+          echo "Total .lean files built: $TOTAL_COUNT"
+          echo "Passed: $PASSED_COUNT"
+          echo "Failed:$FAILED_LIST"
+          if [ $FAIL -eq 1 ]; then
+            exit 1
+          fi
