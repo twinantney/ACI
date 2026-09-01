@@ -1,6 +1,16 @@
-__pycache__/
-*.pyc
-*.pyo
+# C++ Build and Compilation Artifacts
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+genesis_core
+
+# Dynamic Data Manifests and Generated Scripts
+manifest.json
+optimized_architecture_manifest.json
+synthesized_node.py
+synthesized_solution.py
+test_synthesized_proof.lean
+
+# System Execution Text Logs
 *.log
-nohup.out
-.lake/
