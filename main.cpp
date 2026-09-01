@@ -8,7 +8,7 @@ namespace fs = std::filesystem;
 
 int main() {
     std::string test_target = "test_hyper_apex_level_17.py"; 
-    std::cout << "=== RUNNING HYPER-APEX LEVEL 17 AUTONOMOUS INTERFACE ===" << std::endl;
+    std::cout << "=== RUNNING HYPER-APEX LEVEL 17 UNCHARTED ENVIRONMENT ===" << std::endl;
     
     if (!fs::exists(test_target)) {
         std::cerr << "[ERROR] Level 17 engine script missing: " << test_target << std::endl;
