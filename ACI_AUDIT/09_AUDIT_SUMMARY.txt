@@ -1,0 +1,22 @@
+==============================================================================================================
+PROJECT LEAN AUDIT SUMMARY
+==============================================================================================================
+
+Project Lean files scanned : 111
+Total declarations         : 3862
+Theorems + lemmas          : 2726
+Axioms                     : 4
+Sorry occurrences          : 1
+Imports                    : 261
+
+Declaration breakdown:
+  abbrev          5
+  axiom           4
+  def             727
+  inductive       95
+  lemma           1
+  structure       305
+  theorem         2725
+
+Mathlib was NOT excluded from the project's declarations.
+Only Mathlib's external source tree was excluded from scanning.

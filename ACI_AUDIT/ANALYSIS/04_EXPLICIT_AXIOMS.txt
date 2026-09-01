@@ -1,0 +1,15 @@
+EXPLICIT PROJECT AXIOMS
+================================================================================
+LogicModelTheory.lean:91
+axiom completeness_proxy
+
+QuantumCore.lean:152
+axiom MHD_Stable : Prop
+
+QuantumCore.lean:153
+axiom Unitary_Evolution : Prop
+
+QuantumCore.lean:154
+axiom unitary_of_mhd_stable : MHD_Stable → Unitary_Evolution
+
+TOTAL EXPLICIT AXIOM DECLARATIONS: 4

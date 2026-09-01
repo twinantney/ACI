@@ -1,0 +1,56 @@
+LEAN PROJECT — MATHEMATICAL CORPUS CENSUS
+==========================================================================================
+
+Lean source files                         : 111
+Total declarations                       : 3862
+Theorems + lemmas                        : 2726
+Files containing Mathlib imports/references: 106
+Unique import statements                 : 81
+
+DECLARATION KINDS
+--------------------------------------------------
+theorem                  2725
+def                       727
+structure                 305
+inductive                  95
+abbrev                      5
+axiom                       4
+lemma                       1
+
+THEOREMS/LEMMAS BY MATHEMATICAL DOMAIN (filename heuristic)
+----------------------------------------------------------------------
+Physics                                  603
+Analysis                                 330
+Geometry / Topology                      315
+Number Theory                            274
+Algebra                                  223
+Custom ACI / Architecture                221
+Applied / Cross-disciplinary             198
+Computation / Information                196
+Logic / Foundations                      171
+
+PROOF-CONSTRUCTION TOKENS
+--------------------------------------------------
+have                      716
+exact                     566
+apply                     505
+norm_num                  505
+rw                        498
+simp                      465
+intro                     419
+linarith                  293
+rfl                       235
+omega                     221
+ring                      192
+positivity                144
+decide                    105
+nlinarith                  84
+constructor                59
+cases                      56
+calc                       54
+show                       45
+refine                     41
+simpa                      30
+induction                  29
+ring_nf                     5
+continuity                  1
