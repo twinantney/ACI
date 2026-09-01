@@ -7,11 +7,11 @@
 namespace fs = std::filesystem;
 
 int main() {
-    std::string test_target = "test_hyper_apex_level_14.py"; 
-    std::cout << "=== RUNNING MASS SCALE LEAN 4 STRUCTURAL SYNTHESIS ===" << std::endl;
+    std::string test_target = "test_hyper_apex_level_15.py"; 
+    std::cout << "=== RUNNING HYPER-APEX LEVEL 15 EVOLUTIONARY COUPLING ===" << std::endl;
     
     if (!fs::exists(test_target)) {
-        std::cerr << "[ERROR] Level 14 engine script missing: " << test_target << std::endl;
+        std::cerr << "[ERROR] Level 15 script missing: " << test_target << std::endl;
         return 1;
     }
     
@@ -20,13 +20,13 @@ int main() {
     
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
     if (!pipe) {
-        std::cerr << "[CRITICAL ERROR] Failed to allocate execution handles." << std::endl;
+        std::cerr << "[CRITICAL ERROR] Failed to allocate system process handles." << std::endl;
         return 1;
     }
 
-    std::cout << "=== LEVEL 14 PIPELINE STREAM OPEN ===" << std::endl;
+    std::cout << "=== LEVEL 15 PIPELINE STREAM OPEN ===" << std::endl;
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        std::cout << "[L14_RUN]: " << buffer.data();
+        std::cout << "[L15_RUN]: " << buffer.data();
     }
     std::cout << "====================================" << std::endl;
     return 0;
