@@ -7,11 +7,11 @@
 namespace fs = std::filesystem;
 
 int main() {
-    std::string test_target = "test_hyper_apex_level_15.py"; 
-    std::cout << "=== RUNNING HYPER-APEX LEVEL 15 EVOLUTIONARY COUPLING ===" << std::endl;
+    std::string test_target = "test_hyper_apex_level_16.py"; 
+    std::cout << "=== RUNNING HYPER-APEX LEVEL 16 RECURSIVE DEPLOYMENT ===" << std::endl;
     
     if (!fs::exists(test_target)) {
-        std::cerr << "[ERROR] Level 15 script missing: " << test_target << std::endl;
+        std::cerr << "[ERROR] Level 16 script missing: " << test_target << std::endl;
         return 1;
     }
     
@@ -24,9 +24,9 @@ int main() {
         return 1;
     }
 
-    std::cout << "=== LEVEL 15 PIPELINE STREAM OPEN ===" << std::endl;
+    std::cout << "=== LEVEL 16 PIPELINE STREAM OPEN ===" << std::endl;
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        std::cout << "[L15_RUN]: " << buffer.data();
+        std::cout << "[L16_RUN]: " << buffer.data();
     }
     std::cout << "====================================" << std::endl;
     return 0;
