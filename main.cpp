@@ -7,11 +7,11 @@
 namespace fs = std::filesystem;
 
 int main() {
-    std::string test_target = "test_hyper_apex_level_3.py"; 
-    std::cout << "=== RUNNING NEW HYPER-APEX LEVEL 3 HARNESS ===" << std::endl;
+    std::string test_target = "test_hyper_apex_level_4.py"; 
+    std::cout << "=== RUNNING HYPER-APEX LEVEL 4 ORCHESTRATION ===" << std::endl;
     
     if (!fs::exists(test_target)) {
-        std::cerr << "[ERROR] Level 3 script missing: " << test_target << std::endl;
+        std::cerr << "[ERROR] Level 4 script missing: " << test_target << std::endl;
         return 1;
     }
     
@@ -20,14 +20,14 @@ int main() {
     
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
     if (!pipe) {
-        std::cerr << "[CRITICAL ERROR] Failed to open pipe handles." << std::endl;
+        std::cerr << "[CRITICAL ERROR] Failed to open process handles." << std::endl;
         return 1;
     }
 
-    std::cout << "=== LEVEL 3 STREAM INITIATED ===" << std::endl;
+    std::cout << "=== LEVEL 4 PIPELINE STREAM OPEN ===" << std::endl;
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        std::cout << "[L3_TEST]: " << buffer.data();
+        std::cout << "[L4_RUN]: " << buffer.data();
     }
-    std::cout << "=================================" << std::endl;
+    std::cout << "====================================" << std::endl;
     return 0;
 }
