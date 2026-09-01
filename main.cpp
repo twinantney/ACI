@@ -7,16 +7,16 @@
 namespace fs = std::filesystem;
 
 int main() {
-    std::string test_target = "test_hyper_apex_level_18.py"; 
-    std::cout << "=== RUNNING HYPER-APEX LEVEL 18 MULTI-STAGE COUPLING ===" << std::endl;
+    std::string test_target = "test_hyper_apex_level_19.py"; 
+    std::cout << "=== RUNNING HYPER-APEX LEVEL 19 ASYMMETRIC COUPLING ===" << std::endl;
     
     if (!fs::exists(test_target)) {
-        std::cerr << "[ERROR] Level 18 engine script missing: " << test_target << std::endl;
+        std::cerr << "[ERROR] Level 19 engine script missing: " << test_target << std::endl;
         return 1;
     }
     
     std::string command = "python3 -u " + test_target;
-    std::array<char, 512> buffer;
+    std::array<char, 512> buffer_arr;
     
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
     if (!pipe) {
@@ -24,9 +24,9 @@ int main() {
         return 1;
     }
 
-    std::cout << "=== LEVEL 18 PIPELINE STREAM OPEN ===" << std::endl;
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        std::cout << "[L18_RUN]: " << buffer.data();
+    std::cout << "=== LEVEL 19 PIPELINE STREAM OPEN ===" << std::endl;
+    while (fgets(buffer_arr.data(), buffer_arr.size(), pipe.get()) != nullptr) {
+        std::cout << "[L19_RUN]: " << buffer_arr.data();
     }
     std::cout << "====================================" << std::endl;
     return 0;
