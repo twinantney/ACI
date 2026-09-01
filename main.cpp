@@ -7,11 +7,11 @@
 namespace fs = std::filesystem;
 
 int main() {
-    std::string test_target = "test_hyper_apex_level_12.py"; 
-    std::cout << "=== RUNNING ULTIMATE LEAN 4 KERNEL GENERATION PASSTHROUGH ===" << std::endl;
+    std::string test_target = "test_hyper_apex_level_13.py"; 
+    std::cout << "=== RUNNING STANDALONE HIGH-VOLUME LEAN 4 SYNTHESIS ===" << std::endl;
     
     if (!fs::exists(test_target)) {
-        std::cerr << "[ERROR] Level 12 engine script missing: " << test_target << std::endl;
+        std::cerr << "[ERROR] Level 13 engine script missing: " << test_target << std::endl;
         return 1;
     }
     
@@ -24,9 +24,9 @@ int main() {
         return 1;
     }
 
-    std::cout << "=== LEVEL 12 PIPELINE STREAM OPEN ===" << std::endl;
+    std::cout << "=== LEVEL 13 PIPELINE STREAM OPEN ===" << std::endl;
     while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        std::cout << "[L12_RUN]: " << buffer.data();
+        std::cout << "[L13_RUN]: " << buffer.data();
     }
     std::cout << "====================================" << std::endl;
     return 0;
