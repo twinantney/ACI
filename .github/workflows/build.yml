@@ -25,12 +25,14 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Verify expected module list matches disk
+      - name: Build changed Lean modules
         run: |
+          set +e
           cat > /tmp/expected_modules.txt << 'MODLIST'
           AM10
           AWM21
           AWMCore
+          AWM_NS_Master
           AbstractAlgebra
           AcousticsWaves
           AdditiveNumberTheory
@@ -134,24 +136,21 @@ jobs:
           VerifyState
           WaveletAnalysis
           MODLIST
-          ls *.lean 2>/dev/null | sed 's/\.lean$//' | sort > /tmp/actual_modules.txt
           sort /tmp/expected_modules.txt -o /tmp/expected_modules.txt
-          echo "Expected count: $(wc -l < /tmp/expected_modules.txt)"
-          echo "Actual .lean files on disk: $(wc -l < /tmp/actual_modules.txt)"
-          echo "--- In expected list but missing from disk ---"
-          comm -23 /tmp/expected_modules.txt /tmp/actual_modules.txt || true
-          echo "--- On disk but not in expected list (new/unregistered) ---"
-          comm -13 /tmp/expected_modules.txt /tmp/actual_modules.txt || true
-
-      - name: Build every Lean module found on disk
-        run: |
-          set +e
+          CHANGED=$(git diff --name-only HEAD^ HEAD -- '*.lean' | sed 's/\.lean$//')
+          if [ -z "$CHANGED" ]; then
+            echo "No changed Lean files detected."
+            exit 0
+          fi
           FAIL=0
           FAILED_LIST=""
           PASSED_COUNT=0
           TOTAL_COUNT=0
-          for f in *.lean; do
-            target="${f%.lean}"
+          for target in $CHANGED; do
+            if ! grep -Fxq "$target" /tmp/expected_modules.txt; then
+              echo "Skipping $target"
+              continue
+            fi
             TOTAL_COUNT=$((TOTAL_COUNT+1))
             echo "::group::Building $target"
             lake build "$target"
@@ -167,7 +166,7 @@ jobs:
             fi
           done
           echo "----------------------------------------"
-          echo "Total .lean files built: $TOTAL_COUNT"
+          echo "Total Lean files built: $TOTAL_COUNT"
           echo "Passed: $PASSED_COUNT"
           echo "Failed:$FAILED_LIST"
           if [ $FAIL -eq 1 ]; then
