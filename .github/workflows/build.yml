@@ -1,18 +1,16 @@
 name: Build ACI Library
 
 on:
-  workflow_dispatch:
-    inputs:
-      target:
-        description: 'Lean module name to build (no .lean extension)'
-        required: true
-        type: string
+  push:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install elan
         run: |
@@ -27,9 +25,27 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Build target
+      - name: Build changed Lean files
         run: |
-          echo "::group::Building ${{ inputs.target }}"
-          lake build "${{ inputs.target }}"
-          echo "::endgroup::"
-
+          set +e
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- '*.lean' | sed 's/\.lean$//')
+          if [ -z "$CHANGED" ]; then
+            echo "No changed Lean files in this push."
+            exit 0
+          fi
+          FAIL=0
+          for target in $CHANGED; do
+            echo "::group::Building $target"
+            lake build "$target"
+            status=$?
+            echo "::endgroup::"
+            if [ $status -ne 0 ]; then
+              echo "FAILED: $target"
+              FAIL=1
+            else
+              echo "PASSED: $target"
+            fi
+          done
+          if [ $FAIL -eq 1 ]; then
+            exit 1
+          fi
