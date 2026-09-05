@@ -1,16 +1,18 @@
 name: Build ACI Library
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Lean module name to build (no .lean extension)'
+        required: true
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Install elan
         run: |
@@ -25,150 +27,8 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Build changed Lean modules
+      - name: Build target
         run: |
-          set +e
-          cat > /tmp/expected_modules.txt << 'MODLIST'
-          AM10
-          AWM21
-          AWMCore
-          AWM_NS_Master
-          AbstractAlgebra
-          AcousticsWaves
-          AdditiveNumberTheory
-          AlgebraicGeometry
-          AlgebraicTopology
-          AnalyticNumberTheory
-          AntaresCategory
-          ArithmeticGeometry
-          AtomicMolecularPhysics
-          BioinformaticsTheory
-          CategoryTheoryAdvanced
-          CodingTheory
-          Combinatorics
-          ComplexAnalysis
-          CompressedSensing
-          ComputationalComplexity
-          CondensedMatterPhysics
-          ConformalFieldTheory
-          ContactGeometry
-          ControlTheory
-          ControlTheoryAdvanced
-          ConvexAnalysis
-          CryptographyTheory
-          DifferentialGeometry
-          DiscreteMathematics
-          DynamicalSystems
-          EnergyDomain
-          ErgodicTheory
-          FSI
-          FluidDynamics
-          FormalLanguageTheory
-          FunctionalAnalysis
-          FunctionalEquations
-          GameTheory
-          GeneralRelativity
-          Governor
-          GraphTheory
-          HarmonicAnalysis
-          HomologicalAlgebra
-          InformationGeometry
-          InformationTheoryAdvanced
-          IntegralEquations
-          LieTheory
-          LinearAlgebra
-          LogicModelTheory
-          MC2Engine
-          Main
-          Manifold21
-          MathematicalBiology
-          MathematicalChemistry
-          MathematicalEconomics
-          Matrix7
-          MeasureTheory
-          MoruzinLaw
-          MotivicCohomology
-          MyMathlibProject
-          MyProject
-          N7Spine
-          NoncommutativeGeometry
-          NuclearPhysics
-          NumberTheory
-          NumberTheoryCore
-          NumericalAnalysis
-          OperatorTheory
-          Optics
-          OptimalControl
-          OptimalTransport
-          OptimizationTheory
-          Optimus7
-          Optimus7Quantum
-          OrderTheory
-          PartialDifferentialEquations
-          PhaseTransitions
-          PhysicsCore
-          PlasmaPhysics
-          PrimeMasterEngine
-          ProbabilityTheory
-          QuantumCore
-          QuantumErrorCorrection
-          QuantumFieldTheory
-          QuantumGravity
-          QuantumInformation
-          RenormalizationGroup
-          RepresentationTheory
-          SetTheory
-          SignalProcessing
-          SovereignHamiltonian
-          SpineLanguage
-          StatisticalMechanics
-          StochasticDifferentialEquations
-          StringTheory
-          SymplecticTopology
-          Synaptic_Weights
-          Thermodynamics
-          TopologicalDataAnalysis
-          TopologyAdvanced
-          TropicalGeometry
-          UniversalAlgebra
-          VariationalCalculus
-          VerifyBridge
-          VerifyState
-          WaveletAnalysis
-          MODLIST
-          sort /tmp/expected_modules.txt -o /tmp/expected_modules.txt
-          CHANGED=$(git diff --name-only HEAD^ HEAD -- '*.lean' | sed 's/\.lean$//')
-          if [ -z "$CHANGED" ]; then
-            echo "No changed Lean files detected."
-            exit 0
-          fi
-          FAIL=0
-          FAILED_LIST=""
-          PASSED_COUNT=0
-          TOTAL_COUNT=0
-          for target in $CHANGED; do
-            if ! grep -Fxq "$target" /tmp/expected_modules.txt; then
-              echo "Skipping $target"
-              continue
-            fi
-            TOTAL_COUNT=$((TOTAL_COUNT+1))
-            echo "::group::Building $target"
-            lake build "$target"
-            status=$?
-            echo "::endgroup::"
-            if [ $status -ne 0 ]; then
-              echo "FAILED: $target"
-              FAILED_LIST="$FAILED_LIST $target"
-              FAIL=1
-            else
-              echo "PASSED: $target"
-              PASSED_COUNT=$((PASSED_COUNT+1))
-            fi
-          done
-          echo "----------------------------------------"
-          echo "Total Lean files built: $TOTAL_COUNT"
-          echo "Passed: $PASSED_COUNT"
-          echo "Failed:$FAILED_LIST"
-          if [ $FAIL -eq 1 ]; then
-            exit 1
-          fi
+          echo "::group::Building ${{ inputs.target }}"
+          lake build "${{ inputs.target }}"
+          echo "::endgroup::"
