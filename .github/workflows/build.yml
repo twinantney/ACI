@@ -32,3 +32,4 @@ jobs:
           echo "::group::Building ${{ inputs.target }}"
           lake build "${{ inputs.target }}"
           echo "::endgroup::"
+
