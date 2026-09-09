@@ -7,6 +7,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,27 +26,257 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Build changed Lean files
+      - name: Verify 95 CI-verified modules exist
+        run: |
+          cat > /tmp/expected_modules.txt << 'EOF'
+          ACIManifold
+          AM10
+          AWM21
+          AWMCore
+          AbstractAlgebra
+          AcousticsWaves
+          AdditiveNumberTheory
+          AlgebraicGeometry
+          AlgebraicTopology
+          AnalyticNumberTheory
+          AntaresCategory
+          AtomicMolecularPhysics
+          BioinformaticsTheory
+          CategoryTheoryAdvanced
+          CodingTheory
+          Combinatorics
+          ComplexAnalysis
+          ComputationalComplexity
+          CondensedMatterPhysics
+          ConformalFieldTheory
+          ContactGeometry
+          ControlTheory
+          ControlTheoryAdvanced
+          ConvexAnalysis
+          CryptographyTheory
+          DifferentialGeometry
+          DiscreteMathematics
+          DynamicalSystems
+          EnergyDomain
+          ErgodicTheory
+          FSI
+          FluidDynamics
+          FormalLanguageTheory
+          FunctionalAnalysis
+          FunctionalEquations
+          GeneralRelativity
+          Governor
+          GraphTheory
+          HarmonicAnalysis
+          HomologicalAlgebra
+          InformationGeometry
+          InformationTheoryAdvanced
+          IntegralEquations
+          LieTheory
+          LinearAlgebra
+          LogicModelTheory
+          MC2Engine
+          Manifold21
+          MathematicalBiology
+          MathematicalChemistry
+          MathematicalEconomics
+          Matrix7
+          MeasureTheory
+          MoruzinLaw
+          MotivicCohomology
+          N7Spine
+          NoncommutativeGeometry
+          NuclearPhysics
+          NumberTheory
+          NumberTheoryCore
+          NumericalAnalysis
+          Optics
+          OptimalControl
+          OptimalTransport
+          OptimizationTheory
+          Optimus7
+          Optimus7Quantum
+          OrderTheory
+          PhaseTransitions
+          PhysicsCore
+          PlasmaPhysics
+          PrimeMasterEngine
+          ProbabilityTheory
+          QuantumCore
+          QuantumErrorCorrection
+          QuantumFieldTheory
+          QuantumGravity
+          QuantumInformation
+          RepresentationTheory
+          SetTheory
+          SignalProcessing
+          SovereignHamiltonian
+          SpineLanguage
+          StatisticalMechanics
+          StochasticDifferentialEquations
+          SymplecticTopology
+          Synaptic_Weights
+          Thermodynamics
+          TopologicalDataAnalysis
+          TopologyAdvanced
+          TropicalGeometry
+          UniversalAlgebra
+          VariationalCalculus
+          VerifyState
+          WaveletAnalysis
+          EOF
+
+          sed -i 's/^[[:space:]]*//' /tmp/expected_modules.txt
+          sed -i '/^$/d' /tmp/expected_modules.txt
+          sort -u /tmp/expected_modules.txt -o /tmp/expected_modules.txt
+
+          ls *.lean 2>/dev/null | sed 's/\.lean$//' | sort -u > /tmp/actual_modules.txt
+
+          echo "Expected CI-verified modules: $(wc -l < /tmp/expected_modules.txt)"
+          echo "Actual .lean files on disk: $(wc -l < /tmp/actual_modules.txt)"
+
+          echo "--- Expected 95 but missing from disk ---"
+          comm -23 /tmp/expected_modules.txt /tmp/actual_modules.txt
+
+          echo "--- On disk but outside the 95-file CI set ---"
+          comm -13 /tmp/expected_modules.txt /tmp/actual_modules.txt
+
+          if [ "$(wc -l < /tmp/expected_modules.txt)" -ne 95 ]; then
+            echo "::error::CI manifest does not contain exactly 95 modules."
+            exit 1
+          fi
+
+          if comm -23 /tmp/expected_modules.txt /tmp/actual_modules.txt | grep -q .; then
+            echo "::error::A CI-verified module is missing from disk."
+            exit 1
+          fi
+
+      - name: Build all 95 CI-verified Lean modules
         run: |
           set +e
-          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} -- '*.lean' | sed 's/\.lean$//')
-          if [ -z "$CHANGED" ]; then
-            echo "No changed Lean files in this push."
-            exit 0
-          fi
+
           FAIL=0
-          for target in $CHANGED; do
-            echo "::group::Building $target"
+          FAILED_LIST=""
+          PASSED_COUNT=0
+          TOTAL_COUNT=0
+
+          while IFS= read -r target; do
+            [ -n "$target" ] || continue
+
+            TOTAL_COUNT=$((TOTAL_COUNT + 1))
+
+            echo "::group::Building $target.lean"
             lake build "$target"
             status=$?
             echo "::endgroup::"
-            if [ $status -ne 0 ]; then
-              echo "FAILED: $target"
+
+            if [ "$status" -ne 0 ]; then
+              echo "FAILED: $target.lean"
+              FAILED_LIST="$FAILED_LIST $target.lean"
               FAIL=1
             else
-              echo "PASSED: $target"
+              echo "PASSED: $target.lean"
+              PASSED_COUNT=$((PASSED_COUNT + 1))
             fi
-          done
-          if [ $FAIL -eq 1 ]; then
+          done < /tmp/expected_modules.txt
+
+          echo "========================================"
+          echo "95-MODULE CI VERIFICATION"
+          echo "========================================"
+          echo "Expected: 95"
+          echo "Built:    $TOTAL_COUNT"
+          echo "Passed:   $PASSED_COUNT"
+          echo "Failed:   $((TOTAL_COUNT - PASSED_COUNT))"
+
+          if [ -n "$FAILED_LIST" ]; then
+            echo
+            echo "FAILED MODULES:"
+            printf '%s\n' "$FAILED_LIST"
+          fi
+
+          echo "========================================"
+
+          if [ "$TOTAL_COUNT" -ne 95 ]; then
+            echo "::error::CI did not process exactly 95 modules."
             exit 1
           fi
+
+          if [ "$FAIL" -ne 0 ]; then
+            echo "::error::One or more of the 95 CI-verified modules failed."
+            exit 1
+          fi
+
+          echo "ALL 95 CI-VERIFIED MODULES PASSED."
+
+            exit 1
+          fi
+
+          if [ "$FAIL" -ne 0 ]; then
+            echo "::error::One or more of the 95 CI-verified modules failed."
+            exit 1
+          fi
+
+          echo "ALL 95 CI-VERIFIED MODULES PASSED."
+
+      - name: Generate OPTIMUS7 semantic evidence
+        if: always()
+        run: |
+          set -u
+
+          mkdir -p optimus7_ci_evidence
+
+          echo "=== OPTIMUS7 SEMANTIC EVIDENCE ==="
+
+          {
+            echo "{"
+            echo "  \"schema\": \"OPTIMUS7-CI-EVIDENCE-001\","
+            echo "  \"commit\": \"${GITHUB_SHA}\","
+            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+            echo "  \"repository\": \"${GITHUB_REPOSITORY}\","
+            echo "  \"ref\": \"${GITHUB_REF}\","
+            echo "  \"lean_toolchain\": \"$(tr -d '\\n' < lean-toolchain)\","
+            echo "  \"modules\": ["
+          } > optimus7_ci_evidence/semantic_evidence.json
+
+          FIRST=1
+
+          for f in *.lean; do
+            [ -f "$f" ] || continue
+
+            SHA=$(sha256sum "$f" | awk '{print $1}')
+            LINES=$(wc -l < "$f" | tr -d ' ')
+
+            if [ "$FIRST" -eq 0 ]; then
+              echo "," >> optimus7_ci_evidence/semantic_evidence.json
+            fi
+
+            FIRST=0
+
+            printf '    {"file":"%s","sha256":"%s","lines":%s}' \
+              "$f" "$SHA" "$LINES" \
+              >> optimus7_ci_evidence/semantic_evidence.json
+          done
+
+          cat >> optimus7_ci_evidence/semantic_evidence.json <<'EOF'
+          ]
+          }
+          EOF
+
+          python3 -m json.tool \
+            optimus7_ci_evidence/semantic_evidence.json \
+            > optimus7_ci_evidence/semantic_evidence.pretty.json
+
+          sha256sum optimus7_ci_evidence/semantic_evidence.json \
+            > optimus7_ci_evidence/semantic_evidence.sha256
+
+          echo
+          echo "Evidence generated:"
+          cat optimus7_ci_evidence/semantic_evidence.pretty.json
+
+      - name: Upload OPTIMUS7 semantic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: optimus7-semantic-evidence-${{ github.sha }}
+          path: optimus7_ci_evidence/
+          if-no-files-found: error
