@@ -1,65 +1,16 @@
 {
-  "timestamp": 1783439773.440453,
+  "timestamp": 1790372678.8627026,
   "failed_targets": [
     "MyProject",
     "RenormalizationGroup",
-    "ConformalFieldTheory",
-    "WaveletAnalysis",
     "CompressedSensing",
     "GameTheory",
-    "QuantumErrorCorrection",
-    "PhaseTransitions",
-    "DifferentialGeometry",
-    "FunctionalAnalysis",
-    "AlgebraicTopology",
-    "AbstractAlgebra",
-    "NumberTheory",
     "StringTheory",
-    "QuantumGravity",
-    "HomologicalAlgebra",
-    "DynamicalSystems",
-    "RepresentationTheory",
-    "ComplexAnalysis",
-    "Combinatorics",
-    "LieTheory",
-    "LogicModelTheory",
-    "AlgebraicGeometry",
-    "CategoryTheoryAdvanced",
-    "TopologyAdvanced",
-    "ProbabilityTheory",
-    "HarmonicAnalysis",
     "PartialDifferentialEquations",
-    "InformationTheoryAdvanced",
     "OperatorTheory",
-    "NuclearPhysics",
-    "CondensedMatterPhysics",
-    "PlasmaPhysics",
-    "Optics",
-    "AcousticsWaves",
-    "AtomicMolecularPhysics",
-    "FunctionalEquations",
-    "SignalProcessing",
-    "ControlTheoryAdvanced",
-    "ComputationalComplexity",
-    "FormalLanguageTheory",
-    "OptimizationTheory",
-    "VariationalCalculus",
-    "IntegralEquations",
-    "MathematicalBiology",
-    "MathematicalChemistry",
-    "MathematicalEconomics",
-    "SymplecticTopology",
-    "ContactGeometry",
-    "OrderTheory",
-    "UniversalAlgebra",
-    "TropicalGeometry",
-    "MotivicCohomology",
-    "AnalyticNumberTheory",
-    "ArithmeticGeometry",
-    "AdditiveNumberTheory",
-    "DiscreteMathematics"
+    "ArithmeticGeometry"
   ],
-  "blockage_logs_detected": 112,
+  "blockage_logs_detected": 0,
   "untracked_modules": [
     "ACI_Governance_Root.lean",
     "ACI_System_Kernel.lean",
@@ -77,14 +28,6 @@
       "tier": "STANDARD_LEAF"
     },
     {
-      "module": "ConformalFieldTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "WaveletAnalysis",
-      "tier": "STANDARD_LEAF"
-    },
-    {
       "module": "CompressedSensing",
       "tier": "STANDARD_LEAF"
     },
@@ -93,87 +36,7 @@
       "tier": "STANDARD_LEAF"
     },
     {
-      "module": "QuantumErrorCorrection",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "PhaseTransitions",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "DifferentialGeometry",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "FunctionalAnalysis",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "AlgebraicTopology",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "AbstractAlgebra",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "NumberTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
       "module": "StringTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "QuantumGravity",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "HomologicalAlgebra",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "DynamicalSystems",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "RepresentationTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "ComplexAnalysis",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "Combinatorics",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "LieTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "LogicModelTheory",
-      "tier": "CRITICAL_CORE"
-    },
-    {
-      "module": "AlgebraicGeometry",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "CategoryTheoryAdvanced",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "TopologyAdvanced",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "ProbabilityTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "HarmonicAnalysis",
       "tier": "STANDARD_LEAF"
     },
     {
@@ -181,119 +44,11 @@
       "tier": "STANDARD_LEAF"
     },
     {
-      "module": "InformationTheoryAdvanced",
-      "tier": "STANDARD_LEAF"
-    },
-    {
       "module": "OperatorTheory",
       "tier": "STANDARD_LEAF"
     },
     {
-      "module": "NuclearPhysics",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "CondensedMatterPhysics",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "PlasmaPhysics",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "Optics",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "AcousticsWaves",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "AtomicMolecularPhysics",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "FunctionalEquations",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "SignalProcessing",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "ControlTheoryAdvanced",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "ComputationalComplexity",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "FormalLanguageTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "OptimizationTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "VariationalCalculus",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "IntegralEquations",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "MathematicalBiology",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "MathematicalChemistry",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "MathematicalEconomics",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "SymplecticTopology",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "ContactGeometry",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "OrderTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "UniversalAlgebra",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "TropicalGeometry",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "MotivicCohomology",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "AnalyticNumberTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
       "module": "ArithmeticGeometry",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "AdditiveNumberTheory",
-      "tier": "STANDARD_LEAF"
-    },
-    {
-      "module": "DiscreteMathematics",
       "tier": "STANDARD_LEAF"
     }
   ]

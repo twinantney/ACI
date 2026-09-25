@@ -1,16 +1,16 @@
 {
   "suite": "PHASE_34_ADVERSARIAL",
-  "timestamp": 1783152651.6160414,
+  "timestamp": 1790328989.8091598,
   "adversarial_metrics": {
     "worst_case_state_direction": [
-      0.5071003289528376,
-      -0.012923553809435462,
-      0.06854036481579304,
-      -0.012159118090922986,
-      0.11696546655579551,
-      0.8509733791396842
+      0.2091652977727466,
+      0.1185265415304363,
+      0.6093510671220498,
+      -0.07824255289281101,
+      -0.24438258951954353,
+      0.7106671984932392
     ],
-    "adversarial_spectral_radius": 0.10519,
+    "adversarial_spectral_radius": 0.137632,
     "compromised_margin_shift": 0.0
   },
   "system_status": "ADVERSARIAL_NULL_SPACE_EXPLOIT_SUCCESSFUL"

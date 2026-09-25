@@ -1,16 +1,16 @@
 {
   "suite": "PHASE_37_HEALING_GOVERNOR",
-  "timestamp": 1783156218.7231221,
+  "timestamp": 1790328991.24281,
   "h_infinity_metrics": {
     "mitigation_triggered": true,
-    "raw_attack_radius": 10.735325,
-    "calculated_scale_factor": 0.281386,
+    "raw_attack_radius": 9.271661,
+    "calculated_scale_factor": 0.302782,
     "remediated_spectral_radius": 0.85
   },
   "spatial_entropy_metrics": {
-    "terminal_manifold_entropy": 10.522176,
-    "min_diffusion_applied": 0.038515,
-    "max_diffusion_applied": 0.042219
+    "terminal_manifold_entropy": 22.070855,
+    "min_diffusion_applied": 0.029095,
+    "max_diffusion_applied": 0.041024
   },
   "system_status": "REMEDIATION_OVERFLOW_FATAL"
 }

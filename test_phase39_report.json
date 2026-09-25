@@ -1,10 +1,10 @@
 {
   "suite": "PHASE_39_CONSOLIDATED_METRIC",
-  "timestamp": 1783498826.7053876,
+  "timestamp": 1790328992.2981431,
   "kalman_filter_telemetry": {
-    "initial_covariance_trace": 0.08321,
-    "terminal_covariance_trace": 0.057961,
-    "mean_estimation_error": 0.048569
+    "initial_covariance_trace": 0.064647,
+    "terminal_covariance_trace": 0.057761,
+    "mean_estimation_error": 0.047053
   },
   "base_dimensions": [
     6,
@@ -14,6 +14,6 @@
     12,
     4
   ],
-  "final_spectral_radius": 0.022917316444672813,
+  "final_spectral_radius": 0.020368095864239908,
   "meta_synthesis_verified": true
 }

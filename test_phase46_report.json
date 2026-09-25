@@ -1,29 +1,27 @@
 {
   "suite": "PHASE_46_MAXIMUM_PRESSURE_MATRIX",
-  "timestamp": 1783498941.4179533,
-  "entropy_seed": 41415,
+  "timestamp": 1790328998.5363605,
+  "entropy_seed": 98532,
   "symplectic_metrics": {
     "phase_space_dimension": 42,
-    "omega_scalar": 499644.558482,
-    "omega_swapped_scalar": -499644.558482,
+    "omega_scalar": 81158.193265,
+    "omega_swapped_scalar": -81158.193265,
     "antisymmetry_residual": 0.0,
     "antisymmetry_holds": true
   },
   "consensus_gate_metrics": {
     "system_status": "Vetoed",
     "injected_threat_nodes": [
-      0,
-      20
+      6
     ],
     "isolated_threat_nodes": [
-      0,
-      20
+      6
     ],
     "consistency_valid": true
   },
   "quantum_density_metrics": {
     "initial_trace": 1.0,
-    "evolved_trace": 1.0,
+    "evolved_trace": 1.0000000000000002,
     "is_trace_invariant": true
   },
   "system_status": "MAXIMUM_PRESSURE_INVARIANTS_VERIFIED"

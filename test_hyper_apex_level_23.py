@@ -8,7 +8,7 @@ all_items = os.listdir('.')
 lean_files = sorted([f for f in all_items if f.endswith('.lean')])
 total_modules = len(lean_files)
 
-v2_core_script = "import os, sys, json, subprocess, time
+v2_core_script = """import os, sys, json, subprocess, time
 
 def launch_interactive_shell():
     print(\"\\n======================================================\")
@@ -49,3 +49,4 @@ def launch_interactive_shell():
                 print(f\"[GIT LOG] {res.stdout.strip() or 'Ecosystem completely synchronized.'}\")
                 subprocess.run([\"git\", \"push\", \"origin\", \"main\"])
             elif user_input == \"self_ev
+"""

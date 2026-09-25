@@ -1,6 +1,6 @@
 {
   "suite": "PHASE_36_MASTER_MATRIX",
-  "timestamp": 1783153371.2125947,
+  "timestamp": 1790328990.682678,
   "bifurcation_data": {
     "feigenbaum_cliff": 1.9183673469387754,
     "detected_orbits_count": 36
@@ -11,7 +11,7 @@
   },
   "zero_sum_game": {
     "nash_equilibrium_reached": false,
-    "terminal_spectral_radius": 3.661394
+    "terminal_spectral_radius": 3.50867
   },
   "levy_flight_resilience": {
     "initial_impact_amplitude": 62.651181,

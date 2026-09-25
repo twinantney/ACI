@@ -1,21 +1,21 @@
 {
   "suite": "PHASE_33_COMPLETE_STRESS",
-  "timestamp": 1783152492.8873765,
+  "timestamp": 1790328989.4813619,
   "sweep_metrics": {
-    "chaos_cliff_sigma": 0.27131313131313134,
-    "peak_unconstrained_radius": 64.869782
+    "chaos_cliff_sigma": 0.23111111111111113,
+    "peak_unconstrained_radius": 63.992087
   },
   "jacobian_metrics": {
-    "attenuation_margin_expansion": 0.002521,
-    "linearized_spectral_radius": 0.112918
+    "attenuation_margin_expansion": 0.001768,
+    "linearized_spectral_radius": 0.14414
   },
   "global_bounds": {
-    "gershgorin_max_upper_bound": 0.143947,
+    "gershgorin_max_upper_bound": 0.212287,
     "global_enclosure_safe": true
   },
   "temporal_metrics": {
     "trajectory_diverged": false,
-    "final_state_magnitude": 4.1981579216804204e-94
+    "final_state_magnitude": 4.323136151152389e-84
   },
   "system_status": "APEX_NON_LINEAR_SAFETY_BOUND_PROVEN"
 }

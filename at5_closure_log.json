@@ -1,6 +1,9 @@
 {
-    "apex_status": "CERTIFIED",
-    "total_verified_lean_modules": 39,
-    "closure_check_passed": true,
-    "symplectic_invariance": 3.441396069459299
+  "suite": "AT5",
+  "timestamp": 1790372569.652429,
+  "runtime_metrics": {
+    "matrix_dimension": 129,
+    "convergence_factor": 1.313178,
+    "status_signature": "STABLE_UPSTREAM_CLOSURE_PREDICTED"
+  }
 }

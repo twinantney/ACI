@@ -1,16 +1,16 @@
 {
   "suite": "PHASE_32_TRUE_SPECTRAL",
-  "timestamp": 1783152161.1881807,
+  "timestamp": 1790328989.1293197,
   "matrix_metrics": {
     "matrix_dimension": 6,
-    "spectral_radius": 0.107479,
+    "spectral_radius": 0.182842,
     "eigenvalues_real_parts": [
-      0.10747887913652393,
-      0.05309053902084953,
-      0.021336730770383786,
-      1.4939653124142614e-18,
-      1.4939653124142614e-18,
-      -2.120362954581308e-19
+      0.18284166098949917,
+      0.03869253109626501,
+      0.004966857008716172,
+      -5.473995193650853e-18,
+      -5.473995193650853e-18,
+      2.714993633408613e-18
     ]
   },
   "system_status": "TRUE_LYAPUNOV_STABILITY_MATHEMATICALLY_PROVEN"

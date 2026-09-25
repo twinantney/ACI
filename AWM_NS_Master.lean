@@ -1,3 +1,5 @@
+-- 
+-- 
 import Mathlib
 
 namespace AWM_NS_Master
@@ -40,16 +42,12 @@ theorem normSq_eq_zero_iff (a : Vec3) : normSq a = 0 ↔ a = zero := by
   · intro h; rw [h]; simp [zero]
 
 theorem dot_self_eq_normSq (a : Vec3) : dot a a = normSq a := rfl
-
 theorem smul_normSq (c : ℝ) (a : Vec3) : normSq (smul c a) = c ^ 2 * normSq a := by
   unfold normSq smul dot; ring
-
 theorem add_comm (a b : Vec3) : add a b = add b a := by apply ext <;> simp [add] <;> ring
 theorem normSq_zero : normSq zero = 0 := by unfold normSq dot zero
-
 theorem cross_anticomm (a b : Vec3) : cross a b = neg (cross b a) := by
   apply ext <;> simp [cross, neg] <;> ring
-
 theorem dot_add_left (a b c : Vec3) : dot (add a b) c = dot a c + dot b c := by unfold dot add; ring
 
 theorem cauchy_schwarz (a b : Vec3) : (dot a b) ^ 2 ≤ normSq a * normSq b := by
@@ -94,15 +92,9 @@ theorem triangle_ineq (a b : Vec3) :
 end Vec3
 
 structure Mat3 where
-  a11 : ℝ
-  a12 : ℝ
-  a13 : ℝ
-  a21 : ℝ
-  a22 : ℝ
-  a23 : ℝ
-  a31 : ℝ
-  a32 : ℝ
-  a33 : ℝ
+  a11 : ℝ; a12 : ℝ; a13 : ℝ
+  a21 : ℝ; a22 : ℝ; a23 : ℝ
+  a31 : ℝ; a32 : ℝ; a33 : ℝ
 
 namespace Mat3
 
@@ -132,27 +124,20 @@ def symmetricPart (A : Mat3) : Mat3 := smul (1/2) (add A (transpose A))
 def antisymmetricPart (A : Mat3) : Mat3 := smul (1/2) (sub A (transpose A))
 
 theorem frobeniusSq_nonneg (A : Mat3) : 0 ≤ frobeniusSq A := by unfold frobeniusSq; positivity
-
 theorem trace_symmetricPart (A : Mat3) : trace (symmetricPart A) = trace A := by
   unfold trace symmetricPart smul add transpose; ring
-
 theorem trace_antisymmetricPart (A : Mat3) : trace (antisymmetricPart A) = 0 := by
   unfold trace antisymmetricPart smul sub transpose; ring
-
 theorem add_symmetric_antisymmetric (A : Mat3) :
     add (symmetricPart A) (antisymmetricPart A) = A := by
   unfold add symmetricPart antisymmetricPart smul sub transpose
   cases A; simp; constructor <;> ring
-
 theorem transpose_transpose (A : Mat3) : transpose (transpose A) = A := by
   unfold transpose; cases A; rfl
-
 theorem trace_add (A B : Mat3) : trace (add A B) = trace A + trace B := by unfold trace add; ring
 theorem trace_smul (c : ℝ) (A : Mat3) : trace (smul c A) = c * trace A := by unfold trace smul; ring
-
 theorem transpose_symmetricPart (A : Mat3) : transpose (symmetricPart A) = symmetricPart A := by
   unfold symmetricPart transpose smul add; cases A; simp; constructor <;> ring
-
 theorem transpose_add (A B : Mat3) : transpose (add A B) = add (transpose A) (transpose B) := by
   unfold transpose add; cases A; cases B; rfl
 
@@ -197,10 +182,8 @@ theorem trace_le_sqrt_three_mul_frobenius (A : Mat3) :
   exact Real.sqrt_le_sqrt hcs
 
 theorem trace_mul_comm (A B : Mat3) : trace (mul A B) = trace (mul B A) := by unfold trace mul; ring
-
 theorem mul_mulVec (A B : Mat3) (v : Vec3) : mulVec (mul A B) v = mulVec A (mulVec B v) := by
   apply Vec3.ext <;> (unfold mul mulVec; ring)
-
 theorem mul_add (A B C : Mat3) : mul A (add B C) = add (mul A B) (mul A C) := by
   unfold mul add; cases A; cases B; cases C; simp; refine ⟨?_,?_,?_,?_,?_,?_,?_,?_,?_⟩ <;> ring
 
@@ -306,14 +289,12 @@ theorem energy_balance_dissipation_bound (B : VorticityEnergyBalance) (t : Time)
 
 def expDecay (k t : ℝ) : ℝ := Real.exp (-k * t)
 theorem expDecay_pos (k t : ℝ) : 0 < expDecay k t := Real.exp_pos _
-
 theorem expDecay_deriv (k t : ℝ) : HasDerivAt (expDecay k) (-k * expDecay k t) t := by
   unfold expDecay
   have h1 : HasDerivAt (fun s => -k * s) (-k) t := (hasDerivAt_id t).const_mul (-k)
   simpa [mul_comm] using h1.exp
 
 def energyDecay (E0 ν t : ℝ) : ℝ := E0 * expDecay (2*ν) t
-
 theorem energyDecay_deriv (E0 ν t : ℝ) :
     HasDerivAt (energyDecay E0 ν) (-2*ν * energyDecay E0 ν t) t := by
   unfold energyDecay
@@ -327,7 +308,6 @@ theorem energyDecay_nonincreasing (E0 ν t : ℝ) (hE0 : 0 ≤ E0) (hν : 0 ≤ 
   nlinarith
 
 def harmonicPosition (k t : ℝ) : ℝ := Real.cos (Real.sqrt k * t)
-
 theorem harmonicPosition_deriv (k t : ℝ) :
     HasDerivAt (harmonicPosition k) (-(Real.sqrt k) * Real.sin (Real.sqrt k * t)) t := by
   unfold harmonicPosition
@@ -335,7 +315,6 @@ theorem harmonicPosition_deriv (k t : ℝ) :
   simpa [mul_comm] using h1.cos
 
 def harmonicVelocity (k t : ℝ) : ℝ := -(Real.sqrt k) * Real.sin (Real.sqrt k * t)
-
 theorem harmonicVelocity_deriv (k t : ℝ) (hk : 0 ≤ k) :
     HasDerivAt (harmonicVelocity k) (-k * harmonicPosition k t) t := by
   unfold harmonicVelocity harmonicPosition
@@ -394,7 +373,7 @@ theorem rescaleMV_M7 (mv : MarginVector) (c : ℝ) (hc : 0 ≤ c) :
       _ = c * mv.m d0 := rfl
       _ = c * M7 mv := by unfold M7; rw [hd0]
   · calc c * M7 mv ≤ c * mv.m d1 := by
-        apply mul_le_mul_of_nonneg_left (M7_le_all mv d1) hc
+          apply mul_le_mul_of_nonneg_left (M7_le_all mv d1) hc
       _ = (rescaleMV mv c hc).m d1 := rfl
       _ = M7 (rescaleMV mv c hc) := by unfold M7; rw [hd1]
 
@@ -426,10 +405,8 @@ theorem correctBottleneck_at_target (mv : MarginVector) (target : ℝ) (h : 0 �
 theorem correctBottleneck_M7 (mv : MarginVector) (target : ℝ) (h : 0 ≤ target)
     (h_dom : ∀ d, d ≠ bottleneck mv → target ≤ mv.m d) :
     M7 (correctBottleneck mv target h) = target := by
-  unfold M7
   apply le_antisymm
   · have hle := M7_le_all (correctBottleneck mv target h) (bottleneck mv)
-    unfold M7 at hle
     rwa [correctBottleneck_at_target] at hle
   · apply Finset.le_inf'
     intro d _
@@ -463,3 +440,264 @@ structure AWMParameters where
   theta_nonneg : 0 ≤ theta
   theta_lt_one : theta < 1
 
+def dissipationMargin (p : AWMParameters) (D : ℝ) : ℝ := (1 - p.theta) * p.viscosity * D
+
+theorem dissipationMargin_pos (p : AWMParameters) (D : ℝ) (hD : 0 < D) :
+    0 < dissipationMargin p D := by
+  unfold dissipationMargin
+  have h1 : 0 < 1 - p.theta := by linarith [p.theta_lt_one]
+  positivity
+
+theorem dissipationMargin_mono (p : AWMParameters) (D1 D2 : ℝ) (h : D1 ≤ D2) :
+    dissipationMargin p D1 ≤ dissipationMargin p D2 := by
+  unfold dissipationMargin
+  have h1 : 0 ≤ 1 - p.theta := by linarith [p.theta_lt_one]
+  nlinarith [p.viscosity_pos.le]
+
+theorem dissipationMargin_zero (p : AWMParameters) : dissipationMargin p 0 = 0 := by
+  unfold dissipationMargin; ring
+
+theorem dissipationMargin_additive (p : AWMParameters) (D1 D2 : ℝ) :
+    dissipationMargin p (D1 + D2) = dissipationMargin p D1 + dissipationMargin p D2 := by
+  unfold dissipationMargin; ring
+
+theorem dissipationMargin_triple_product_mono (p1 p2 : AWMParameters) (D : ℝ) (hD : 0 ≤ D)
+    (hv : p1.viscosity ≤ p2.viscosity) (hθ : p2.theta ≤ p1.theta) :
+    dissipationMargin p1 D ≤ dissipationMargin p2 D := by
+  unfold dissipationMargin
+  have h1 : 0 ≤ 1 - p1.theta := by linarith [p1.theta_lt_one]
+  have h2 : 1 - p1.theta ≤ 1 - p2.theta := by linarith
+  nlinarith [p1.viscosity_pos.le, p2.viscosity_pos.le]
+
+inductive EvidenceStatus | proved | derived | interface | open_
+
+structure AnalyticEvidence where
+  name : String
+  status : EvidenceStatus
+  statement : String
+
+def RealFoundationObligation : AnalyticEvidence :=
+  {name := "Real foundation", status := EvidenceStatus.open_,
+   statement := "Construct genuine real-number completeness and continuous-analysis foundations."}
+def LebesgueFoundationObligation : AnalyticEvidence :=
+  {name := "Lebesgue integration", status := EvidenceStatus.open_,
+   statement := "Construct continuous R3 measure and integration."}
+def LpFoundationObligation : AnalyticEvidence :=
+  {name := "Lp spaces", status := EvidenceStatus.open_,
+   statement := "Construct genuine continuous Lp spaces and norms on R3."}
+def HolderObligation : AnalyticEvidence :=
+  {name := "Holder inequality", status := EvidenceStatus.open_,
+   statement := "Prove continuous Holder inequality."}
+def SobolevObligation : AnalyticEvidence :=
+  {name := "Sobolev embedding", status := EvidenceStatus.open_,
+   statement := "Prove the required three-dimensional Sobolev embedding/interpolation."}
+def BiotSavartObligation : AnalyticEvidence :=
+  {name := "Biot-Savart", status := EvidenceStatus.open_,
+   statement := "Derive velocity-vorticity reconstruction and differentiation."}
+def SingularIntegralObligation : AnalyticEvidence :=
+  {name := "Calderon-Zygmund", status := EvidenceStatus.open_,
+   statement := "Prove required Lp singular-integral bounds."}
+def CriticalStretchingObligation : AnalyticEvidence :=
+  {name := "Critical vortex stretching", status := EvidenceStatus.open_,
+   statement := "Prove |int omega^T S omega| <= theta*nu*||grad omega||_2^2 + G(t)*||omega||_2^2 with theta<1 and G locally integrable."}
+def ContinuationObligation : AnalyticEvidence :=
+  {name := "Global continuation", status := EvidenceStatus.open_,
+   statement := "Prove critical control excludes finite-time loss of smoothness."}
+
+structure FeedbackIntegrability where
+  coefficient : Time → ℝ
+  finite : Prop
+  measurable : Prop
+  integrable : Prop
+
+structure CriticalVortexStretchingClosure where
+  viscosity : ℝ
+  theta : ℝ
+  feedback : Time → ℝ
+  thetaCondition : theta < 1
+  stretchingBound : Prop
+  feedbackIntegrable : FeedbackIntegrability
+
+structure ClosedEnergyInequality where
+  balance : VorticityEnergyBalance
+  closure : CriticalVortexStretchingClosure
+  inequality : Prop
+  positiveReserve : Prop
+
+structure GronwallCertificate where
+  inequality : ClosedEnergyInequality
+  integralCoefficient : Prop
+  finiteBound : Prop
+
+structure ContinuationCertificate where
+  finiteVorticityControl : Prop
+  regularityCriterion : Prop
+  continuation : Prop
+
+structure GlobalRegularityCertificate where
+  localExistence : Prop
+  closedEnergy : Prop
+  continuation : ContinuationCertificate
+  globalRegularity : Prop
+
+structure SingularIntegralOperator where
+  kernel : Point3 → Point3 → ℝ
+  cancellation : Prop
+  homogeneity : Prop
+  principalValue : Prop
+
+structure HolderTriple where
+  p : ℝ; q : ℝ; r : ℝ
+  reciprocal : 1/p + 1/q = 1/r
+
+def stdHolderTriple : HolderTriple := {p := 2, q := 2, r := 1, reciprocal := by norm_num}
+
+structure HolderEstimate where
+  triple : HolderTriple
+  estimate : Prop
+
+structure InterpolationEstimate where
+  lower : ℝ; upper : ℝ; target : ℝ; parameter : ℝ
+  estimate : Prop
+
+structure SobolevEmbedding where
+  sourceExponent : ℝ
+  targetExponent : ℝ
+  derivativeOrder : ℕ
+  dimension : ℕ
+  embedding : Prop
+
+structure BiotSavartThreeDimensional where
+  omega : VorticityField
+  velocity : VelocityField
+  kernel : Point3 → Point3 → Vec3
+  singularity : Prop
+  divergenceFree : Prop
+  curlRecovery : Prop
+  decay : Prop
+
+structure GradientBiotSavart where
+  velocity : VelocityField
+  vorticity : VorticityField
+  gradient : GradientField
+  singularOperator : Prop
+  CalderonZygmundRepresentation : Prop
+
+structure StretchingEstimate where
+  constant : ℝ
+  constant_pos : 0 < constant
+  estimate : Prop
+
+structure CriticalScalingData where
+  lambda : ℝ
+  lambda_pos : 0 < lambda
+  velocityExponent : ℝ
+  vorticityExponent : ℝ
+  timeExponent : ℝ
+  spatialExponent : ℝ
+  scalingInvariant : Prop
+
+def CriticalVorticityExponent : ℝ := 3/2
+
+structure CriticalClosurePipeline where
+  scaling : CriticalScalingData
+  BiotSavart : BiotSavartThreeDimensional
+  gradient : GradientBiotSavart
+  holder : HolderEstimate
+  interpolation : InterpolationEstimate
+  Sobolev : SobolevEmbedding
+  stretching : StretchingEstimate
+  closure : CriticalVortexStretchingClosure
+  Gronwall : GronwallCertificate
+  continuation : ContinuationCertificate
+
+structure AWMCoreTarget where
+  PDE : NavierStokes
+  vorticity : VorticityEvolution
+  energy : VorticityEnergyBalance
+  critical : CriticalClosurePipeline
+  global : GlobalRegularityCertificate
+
+def AWMCoreCompletionTarget : Prop := Nonempty AWMCoreTarget
+
+structure AWMStatus where
+  algebra : EvidenceStatus
+  PDE : EvidenceStatus
+  continuousAnalysis : EvidenceStatus
+  BiotSavart : EvidenceStatus
+  singularIntegrals : EvidenceStatus
+  criticalInterpolation : EvidenceStatus
+  vortexStretching : EvidenceStatus
+  continuation : EvidenceStatus
+
+def CurrentAWMStatus : AWMStatus :=
+  {algebra := EvidenceStatus.derived, PDE := EvidenceStatus.interface,
+   continuousAnalysis := EvidenceStatus.open_, BiotSavart := EvidenceStatus.open_,
+   singularIntegrals := EvidenceStatus.open_, criticalInterpolation := EvidenceStatus.open_,
+   vortexStretching := EvidenceStatus.open_, continuation := EvidenceStatus.open_}
+
+structure AWMLock where
+  normSq_nn : ∀ a : Vec3, 0 ≤ Vec3.normSq a
+  cauchy_schwarz : ∀ a b : Vec3, (Vec3.dot a b) ^ 2 ≤ Vec3.normSq a * Vec3.normSq b
+  triangle_ineq : ∀ a b : Vec3,
+    Real.sqrt (Vec3.normSq (Vec3.add a b)) ≤ Real.sqrt (Vec3.normSq a) + Real.sqrt (Vec3.normSq b)
+  frobeniusSq_nn : ∀ A : Mat3, 0 ≤ Mat3.frobeniusSq A
+  mulVec_bound : ∀ (A : Mat3) (v : Vec3), Vec3.normSq (Mat3.mulVec A v) ≤ Mat3.frobeniusSq A * Vec3.normSq v
+  mul_mulVec_assoc : ∀ (A B : Mat3) (v : Vec3), Mat3.mulVec (Mat3.mul A B) v = Mat3.mulVec A (Mat3.mulVec B v)
+  trace_mul_comm : ∀ A B : Mat3, Mat3.trace (Mat3.mul A B) = Mat3.trace (Mat3.mul B A)
+  trace_split : ∀ A : Mat3, Mat3.add (Mat3.symmetricPart A) (Mat3.antisymmetricPart A) = A
+  transpose_involutive : ∀ A : Mat3, Mat3.transpose (Mat3.transpose A) = A
+  margin_pos : ∀ (p : AWMParameters) (D : ℝ), 0 < D → 0 < dissipationMargin p D
+  margin_additive : ∀ (p : AWMParameters) (D1 D2 : ℝ),
+    dissipationMargin p (D1 + D2) = dissipationMargin p D1 + dissipationMargin p D2
+  margin_triple_mono : ∀ (p1 p2 : AWMParameters) (D : ℝ), 0 ≤ D → p1.viscosity ≤ p2.viscosity →
+    p2.theta ≤ p1.theta → dissipationMargin p1 D ≤ dissipationMargin p2 D
+  energy_stretch_lb : ∀ (B : VorticityEnergyBalance) (t : Time), 0 ≤ B.derivative t → 0 ≤ B.stretching t
+  strain_rotation_split : ∀ (G : GradientField) (t : Time) (p : Point3),
+    Mat3.add (strain G t p) (rotation G t p) = G t p
+  convective_bound : ∀ (G : GradientField) (u : VelocityField) (t : Time) (p : Point3),
+    Vec3.normSq (convective G u t p) ≤ Mat3.frobeniusSq (G t p) * Vec3.normSq (u t p)
+  incompressible_zero_field : incompressible (fun _ _ => Mat3.zero)
+  energyDecay_eq : ∀ (E0 ν t : ℝ), HasDerivAt (energyDecay E0 ν) (-2*ν * energyDecay E0 ν t) t
+  energyDecay_decreasing : ∀ (E0 ν t : ℝ), 0 ≤ E0 → 0 ≤ ν → -2*ν * energyDecay E0 ν t ≤ 0
+  harmonicPosition_eq : ∀ (k t : ℝ),
+    HasDerivAt (harmonicPosition k) (-(Real.sqrt k) * Real.sin (Real.sqrt k * t)) t
+  harmonicVelocity_eq : ∀ (k t : ℝ), 0 ≤ k → HasDerivAt (harmonicVelocity k) (-k * harmonicPosition k t) t
+  harmonic_energy_conserved : ∀ (k t : ℝ), 0 ≤ k →
+    HasDerivAt (fun s => (harmonicVelocity k s)^2 + k * (harmonicPosition k s)^2) 0 t
+  M7_nonneg : ∀ mv : MarginVector, 0 ≤ M7 mv
+  M7_le_all : ∀ (mv : MarginVector) (d : Domain7), M7 mv ≤ mv.m d
+  rescaleMV_M7 : ∀ (mv : MarginVector) (c : ℝ) (hc : 0 ≤ c), M7 (rescaleMV mv c hc) = c * M7 mv
+  correctBottleneck_M7 : ∀ (mv : MarginVector) (target : ℝ) (h : 0 ≤ target),
+    (∀ d, d ≠ bottleneck mv → target ≤ mv.m d) → M7 (correctBottleneck mv target h) = target
+  triad_total_nn : ∀ T : AWMTriad, 0 ≤ T.total
+
+def AWMLockCert : AWMLock where
+  normSq_nn := Vec3.normSq_nonneg
+  cauchy_schwarz := Vec3.cauchy_schwarz
+  triangle_ineq := Vec3.triangle_ineq
+  frobeniusSq_nn := Mat3.frobeniusSq_nonneg
+  mulVec_bound := Mat3.mulVec_normSq_le
+  mul_mulVec_assoc := Mat3.mul_mulVec
+  trace_mul_comm := Mat3.trace_mul_comm
+  trace_split := Mat3.add_symmetric_antisymmetric
+  transpose_involutive := Mat3.transpose_transpose
+  margin_pos := dissipationMargin_pos
+  margin_additive := dissipationMargin_additive
+  margin_triple_mono := dissipationMargin_triple_product_mono
+  energy_stretch_lb := energy_balance_stretching_lower_bound
+  strain_rotation_split := strain_add_rotation
+  convective_bound := convective_normSq_bound
+  incompressible_zero_field := incompressible_zero
+  energyDecay_eq := energyDecay_deriv
+  energyDecay_decreasing := energyDecay_nonincreasing
+  harmonicPosition_eq := harmonicPosition_deriv
+  harmonicVelocity_eq := harmonicVelocity_deriv
+  harmonic_energy_conserved := harmonic_energy_conserved
+  M7_nonneg := M7_nonneg
+  M7_le_all := M7_le_all
+  rescaleMV_M7 := rescaleMV_M7
+  correctBottleneck_M7 := correctBottleneck_M7
+  triad_total_nn := AWMTriad.total_nonneg
+
+end AWM_NS_Master

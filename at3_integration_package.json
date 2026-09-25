@@ -1,8 +1,8 @@
 {
   "suite": "AT3",
-  "timestamp": 1783150736.460243,
+  "timestamp": 1790372679.0033784,
   "primary_unresolved_core": [
-    "LogicModelTheory"
+    "None"
   ],
   "files_to_track_locally": [
     "ACI_Governance_Root.lean",
@@ -11,5 +11,5 @@
     "Bridge.lean",
     "Synaptic_Weights.lean"
   ],
-  "total_targets_flagged": 64
+  "total_targets_flagged": 8
 }
