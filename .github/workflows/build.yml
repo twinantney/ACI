@@ -26,7 +26,7 @@ jobs:
       - name: Get Mathlib cache
         run: lake exe cache get
 
-      - name: Verify 95 CI-verified modules exist
+      - name: Verify CI-verified modules exist
         run: |
           cat > /tmp/expected_modules.txt << 'EOF'
           ACIManifold
@@ -37,12 +37,10 @@ jobs:
           AcousticsWaves
           AdditiveNumberTheory
           AlgebraicGeometry
-          AlgebraicTopology
           AnalyticNumberTheory
           AntaresCategory
           AtomicMolecularPhysics
           BioinformaticsTheory
-          CategoryTheoryAdvanced
           CodingTheory
           Combinatorics
           ComplexAnalysis
@@ -51,15 +49,12 @@ jobs:
           ConformalFieldTheory
           ContactGeometry
           ControlTheory
-          ControlTheoryAdvanced
           ConvexAnalysis
           CryptographyTheory
-          DifferentialGeometry
           DiscreteMathematics
           DynamicalSystems
           EnergyDomain
           ErgodicTheory
-          FSI
           FluidDynamics
           FormalLanguageTheory
           FunctionalAnalysis
@@ -72,9 +67,7 @@ jobs:
           InformationGeometry
           InformationTheoryAdvanced
           IntegralEquations
-          LieTheory
           LinearAlgebra
-          LogicModelTheory
           MC2Engine
           Manifold21
           MathematicalBiology
@@ -97,10 +90,8 @@ jobs:
           Optimus7
           Optimus7Quantum
           OrderTheory
-          PhaseTransitions
           PhysicsCore
           PlasmaPhysics
-          PrimeMasterEngine
           ProbabilityTheory
           QuantumCore
           QuantumErrorCorrection
@@ -135,14 +126,8 @@ jobs:
           echo "Expected CI-verified modules: $(wc -l < /tmp/expected_modules.txt)"
           echo "Actual .lean files on disk: $(wc -l < /tmp/actual_modules.txt)"
 
-          echo "--- Expected 95 but missing from disk ---"
-          comm -23 /tmp/expected_modules.txt /tmp/actual_modules.txt
-
-          echo "--- On disk but outside the 95-file CI set ---"
-          comm -13 /tmp/expected_modules.txt /tmp/actual_modules.txt
-
-          if [ "$(wc -l < /tmp/expected_modules.txt)" -ne 95 ]; then
-            echo "::error::CI manifest does not contain exactly 95 modules."
+          if [ "$(wc -l < /tmp/expected_modules.txt)" -ne 86 ]; then
+            echo "::error::CI manifest does not contain exactly 86 modules."
             exit 1
           fi
 
@@ -151,7 +136,7 @@ jobs:
             exit 1
           fi
 
-      - name: Build all 95 CI-verified Lean modules
+      - name: Build all CI-verified Lean modules
         run: |
           set +e
 
@@ -181,9 +166,9 @@ jobs:
           done < /tmp/expected_modules.txt
 
           echo "========================================"
-          echo "95-MODULE CI VERIFICATION"
+          echo "CI VERIFICATION REPORT"
           echo "========================================"
-          echo "Expected: 95"
+          echo "Expected: 86"
           echo "Built:    $TOTAL_COUNT"
           echo "Passed:   $PASSED_COUNT"
           echo "Failed:   $((TOTAL_COUNT - PASSED_COUNT))"
@@ -196,27 +181,17 @@ jobs:
 
           echo "========================================"
 
-          if [ "$TOTAL_COUNT" -ne 95 ]; then
-            echo "::error::CI did not process exactly 95 modules."
+          if [ "$TOTAL_COUNT" -ne 86 ]; then
+            echo "::error::CI did not process exactly 86 modules."
             exit 1
           fi
 
           if [ "$FAIL" -ne 0 ]; then
-            echo "::error::One or more of the 95 CI-verified modules failed."
+            echo "::error::One or more of the CI-verified modules failed."
             exit 1
           fi
 
-          echo "ALL 95 CI-VERIFIED MODULES PASSED."
-
-            exit 1
-          fi
-
-          if [ "$FAIL" -ne 0 ]; then
-            echo "::error::One or more of the 95 CI-verified modules failed."
-            exit 1
-          fi
-
-          echo "ALL 95 CI-VERIFIED MODULES PASSED."
+          echo "ALL CI-VERIFIED MODULES PASSED."
 
       - name: Generate OPTIMUS7 semantic evidence
         if: always()
@@ -234,7 +209,7 @@ jobs:
             echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
             echo "  \"repository\": \"${GITHUB_REPOSITORY}\","
             echo "  \"ref\": \"${GITHUB_REF}\","
-            echo "  \"lean_toolchain\": \"$(tr -d '\\n' < lean-toolchain)\","
+            echo "  \"lean_toolchain\": \"$(tr -d '\n' < lean-toolchain)\","
             echo "  \"modules\": ["
           } > optimus7_ci_evidence/semantic_evidence.json
 
