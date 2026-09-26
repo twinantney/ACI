@@ -32,7 +32,6 @@ def analyze_and_sync_master_corpus():
     for file_path in sorted(verified_files):
         if not os.path.exists(file_path) and os.path.exists(os.path.join("lean", file_path)):
             file_path = os.path.join("lean", file_path)
-            
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
                 lines = f.readlines()
@@ -47,7 +46,7 @@ def analyze_and_sync_master_corpus():
         f.write("".join(corpus_blocks))
 
     print(f"[RECURSIVE BRAIN SYNC] Master Corpus updated at root: {total_lines} lines across {module_count} modules.")
-    
+
     return {
         "total_lines": total_lines,
         "module_count": module_count
@@ -57,7 +56,7 @@ def get_max_existing_node_index():
     """Scans all existing lean modules to find the highest node index generated so far,
     ensuring all future generated theorems have strictly unique, non-overlapping names."""
     max_idx = 0
-    for fpath in glob.glob("lean/*.lean"):
+    for fpath in glob.glob("*.lean"):
         try:
             with open(fpath, 'r', encoding='utf-8', errors='ignore') as f:
                 content = f.read()
@@ -69,7 +68,7 @@ def get_max_existing_node_index():
     return max_idx
 
 def generate_polymorphic_node_block(i: int, base_entropy_seed: int) -> str:
-    """Dynamically rotates through 5 advanced mathematical & logical profiles 
+    """Dynamically rotates through 5 advanced mathematical & logical profiles
     to guarantee diverse, high-density formal theorem generation."""
     profile_type = i % 5
 
@@ -90,7 +89,7 @@ def recursive_transform_{i} (s : RecursiveEvolutionNode_{i}) : Int :=
   s.state_metric * s.state_metric + {i} * s.state_metric + corpus_integration_entropy
 
 theorem recursive_contraction_proof_{i} (s : RecursiveEvolutionNode_{i}) :
-  s.state_metric + {i} + corpus_integration_entropy >= 0 -> 
+  s.state_metric + {i} + corpus_integration_entropy >= 0 ->
   s.state_metric * s.state_metric + {i} >= 0 := by
   intro h
   nlinarith
@@ -116,7 +115,7 @@ structure RecursiveEvolutionNode_{i} : Type where
   node_id : Nat := {i}
   entropy_factor : Int := {base_entropy_seed}
   state_metric : Int
-  mod_metric : Nat := (abs state_metric).toNat % {mod_val}
+  mod_metric : Nat := state_metric.natAbs % {mod_val}
   is_sovereign : Bool
   evolution_bound : state_metric + {i} >= -1000000
   deriving DecidableEq, Repr
@@ -135,7 +134,7 @@ theorem historical_consistency_proof_{i} (a b : Int) :
 
 theorem quadratic_invariant_proof_{i} (n : Int) :
   n + {i} >= n + {i} := by
-  rfl
+  omega
 
 theorem structural_monotonicity_proof_{i} (x : Int) :
   x * 0 = 0 := by
@@ -224,11 +223,6 @@ structure RecursiveEvolutionNode_{i} : Type where
 def recursive_transform_{i} (s : RecursiveEvolutionNode_{i}) : Int :=
   s.upper_cap - {i}
 
-theorem recursive_contraction_proof_{i} (s : RecursiveEvolutionNode_{i}) :
-  s.upper_cap - {i} = s.state_metric + 100 := by
-  dsimp [RecursiveEvolutionNode_{i}.upper_cap]
-  omega
-
 theorem historical_consistency_proof_{i} (n : Int) :
   n + {i} + 100 > n := by
   omega
@@ -252,15 +246,13 @@ def synthesize_formal_module(base_name: str, node_target: int):
     start_node = get_max_existing_node_index() + 1
     end_node = start_node + node_target
 
-    os.makedirs("lean", exist_ok=True)
-
     timestamp = int(time.time())
     dynamic_module_name = f"{base_name}_{timestamp}"
-    target_file = f"lean/{dynamic_module_name}.lean"
+    target_file = f"{dynamic_module_name}.lean"
 
     start_time = time.time()
 
-    print(f"=== ACI MEGA-SCALE RECURSIVE INTELLIGENCE SYNTHESIS ENGINE (v3.0 Advanced Polymorphic) ===")
+    print(f"=== ACI MEGA-SCALE RECURSIVE INTELLIGENCE SYNTHESIS ENGINE (v3.1 Advanced Polymorphic) ===")
     print(f"[METAPROGRAM] Minting Massive Autonomous Evolution: {target_file}")
     print(f"[METAPROGRAM] Ingesting {historical_modules} historical modules ({corpus_intelligence['total_lines']} lines)...")
     print(f"[METAPROGRAM] Non-overlapping offset active: Node index range [{start_node} -> {end_node - 1}]")
@@ -280,30 +272,7 @@ def synthesize_formal_module(base_name: str, node_target: int):
     for i in range(start_node, end_node):
         lean_code_blocks.append(generate_polymorphic_node_block(i, base_entropy_seed))
 
-    audit_footer = f"""
-structure SynthesisAudit_{dynamic_module_name} where
-  historical_modules_bound : ℕ
-  node_count               : ℕ
-  start_node_index         : ℕ
-  end_node_index           : ℕ
-  sorry_count              : ℕ
-  recursive_verified       : Bool
-
-def system_audit_{dynamic_module_name} : SynthesisAudit_{dynamic_module_name} := {{
-  historical_modules_bound := {historical_modules}
-  node_count               := {node_target}
-  start_node_index         := {start_node}
-  end_node_index           := {end_node - 1}
-  sorry_count              := 0
-  recursive_verified       := true
-}}
-
-theorem module_sorry_free_{dynamic_module_name} : system_audit_{dynamic_module_name}.sorry_count = 0 := by decide
-theorem module_sovereign_{dynamic_module_name} : system_audit_{dynamic_module_name}.recursive_verified = true := by decide
-
-end ACI.{dynamic_module_name}
-"""
-    lean_code_blocks.append(audit_footer)
+    lean_code_blocks.append(f"\nend ACI.{dynamic_module_name}\n")
 
     full_payload = "\n".join(lean_code_blocks)
     line_count = len(full_payload.split('\n'))
@@ -321,14 +290,14 @@ end ACI.{dynamic_module_name}
         "lines_synthesized": line_count,
         "nodes_generated": node_target,
         "node_index_range": f"{start_node} to {end_node - 1}",
-        "theorems_minted": (node_target * 4) + 2,
+        "theorems_minted": (node_target * 4),
         "historical_modules_ingested": historical_modules,
         "corpus_entropy_seed": base_entropy_seed,
-        "zero_sorry_integrity": True,
-        "execution_time_seconds": float(run_duration)
+        "execution_time_seconds": float(run_duration),
+        "note": "sorry-free and CI-verified status must be confirmed by actual compilation/CI, not asserted by this generator."
     }
 
-    print("\n=== ADVANCED POLYMORPHIC SYNTHESIS AUDIT REPORT ===")
+    print("\n=== ADVANCED POLYMORPHIC SYNTHESIS REPORT ===")
     print(json.dumps(report, indent=2))
     print(f"\n[NEXT STEP] Test compilation via: lean {target_file}")
 
