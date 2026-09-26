@@ -1,1 +1,0 @@
-namespace CrownAlgebra\n  inductive StateSpaceTree : Type\n    | ground : StateSpaceTree\n    | loop : StateSpaceTree -> StateSpaceTree\n  def compile_crown_index (n : Nat) : Nat := n + 1143\n  theorem crown_invariant (n : Nat) : compile_crown_index n + 0 = compile_crown_index n := by rfl\nend CrownAlgebra

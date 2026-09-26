@@ -1,9 +1,9 @@
 {
   "test_suite": "AT1",
-  "timestamp": 1790372678.6832676,
+  "timestamp": 1790376864.9654763,
   "scale_metrics": {
-    "lyapunov_value": 0.8997382984892828,
-    "compute_overhead_seconds": 0.004319009996834211
+    "lyapunov_value": 0.9490547707415624,
+    "compute_overhead_seconds": 0.0042645840003388
   },
   "verification_gaps": {
     "unresolved_count": 8,

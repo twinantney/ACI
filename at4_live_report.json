@@ -1,10 +1,10 @@
 {
   "test_suite": "AT4_FIXED",
-  "timestamp": 1790372679.1392272,
+  "timestamp": 1790376865.622211,
   "live_data": {
-    "physical_lean_files": 129,
+    "physical_lean_files": 130,
     "active_failed_targets": 8,
-    "derived_verified_count": 121,
-    "true_coverage_pct": 93.8
+    "derived_verified_count": 122,
+    "true_coverage_pct": 93.85
   }
 }

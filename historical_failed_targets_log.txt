@@ -1,0 +1,8 @@
+MyProject
+RenormalizationGroup
+CompressedSensing
+GameTheory
+StringTheory
+PartialDifferentialEquations
+OperatorTheory
+ArithmeticGeometry
