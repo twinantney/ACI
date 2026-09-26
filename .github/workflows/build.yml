@@ -189,4 +189,107 @@ jobs:
           echo "ALL CI-VERIFIED MODULES PASSED."
 
       - name: Build candidate new Lean modules
-        if: always(
+        if: always()
+        run: |
+          set +e
+          cat > /tmp/candidate_modules.txt << 'EOC'
+          ACIMegaCore_1790387842
+          ACIFormalCore_v2
+          ACISynthesisCore_1790384450_v2
+          ACISignedCore_1790385282_v2
+          ACISignedCore_1790385887_v2
+          ACICorpusCore_1790386130_v2
+          ACICorpusCore_1790386473_v2
+          ACIRecursiveCore_1790387036_v2
+          ACIMegaCore_1790392608
+          ACIMegaCore_1790393333
+          ACIMegaCore_1790393390
+          ACIMegaCore_1790395136
+          EOC
+
+          sed -i 's/^[[:space:]]*//' /tmp/candidate_modules.txt
+          sed -i '/^$/d' /tmp/candidate_modules.txt
+
+          CFAIL=0
+          CPASSED=0
+          CTOTAL=0
+          CFAILED_LIST=""
+
+          while IFS= read -r target; do
+            [ -n "$target" ] || continue
+            CTOTAL=$((CTOTAL + 1))
+            echo "::group::Building candidate $target.lean"
+            lake build "$target"
+            status=$?
+            echo "::endgroup::"
+            if [ "$status" -ne 0 ]; then
+              echo "CANDIDATE FAILED: $target.lean"
+              CFAILED_LIST="$CFAILED_LIST $target.lean"
+              CFAIL=1
+            else
+              echo "CANDIDATE PASSED: $target.lean"
+              CPASSED=$((CPASSED + 1))
+            fi
+          done < /tmp/candidate_modules.txt
+
+          echo "========================================"
+          echo "CANDIDATE MODULE REPORT (non-blocking)"
+          echo "========================================"
+          echo "Total:  $CTOTAL"
+          echo "Passed: $CPASSED"
+          echo "Failed: $((CTOTAL - CPASSED))"
+
+          if [ -n "$CFAILED_LIST" ]; then
+            echo
+            echo "CANDIDATE FAILED MODULES:"
+            printf '%s\n' "$CFAILED_LIST"
+          fi
+
+          echo "========================================"
+
+      - name: Generate OPTIMUS7 semantic evidence
+        if: always()
+        run: |
+          set -u
+          mkdir -p optimus7_ci_evidence
+          echo "=== OPTIMUS7 SEMANTIC EVIDENCE ==="
+          {
+            echo "{"
+            echo "  \"schema\": \"OPTIMUS7-CI-EVIDENCE-001\","
+            echo "  \"commit\": \"${GITHUB_SHA}\","
+            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
+            echo "  \"repository\": \"${GITHUB_REPOSITORY}\","
+            echo "  \"ref\": \"${GITHUB_REF}\","
+            echo "  \"lean_toolchain\": \"$(tr -d '\n' < lean-toolchain)\","
+            echo "  \"modules\": ["
+          } > optimus7_ci_evidence/semantic_evidence.json
+
+          FIRST=1
+          for f in *.lean; do
+            [ -f "$f" ] || continue
+            SHA=$(sha256sum "$f" | awk '{print $1}')
+            LINES=$(wc -l < "$f" | tr -d ' ')
+            if [ "$FIRST" -eq 0 ]; then
+              echo "," >> optimus7_ci_evidence/semantic_evidence.json
+            fi
+            FIRST=0
+            printf '    {"file":"%s","sha256":"%s","lines":%s}' \
+              "$f" "$SHA" "$LINES" \
+              >> optimus7_ci_evidence/semantic_evidence.json
+          done
+
+          cat >> optimus7_ci_evidence/semantic_evidence.json <<'EOC'
+          ]
+          }
+          EOC
+
+          python3 -m json.tool \
+            optimus7_ci_evidence/semantic_evidence.json \
+            > optimus7_ci_evidence/semantic_evidence.pretty.json
+
+          sha256sum optimus7_ci_evidence/semantic_evidence.json \
+            > optimus7_ci_evidence/semantic_evidence.sha256
+
+          echo
+          echo "Evidence generated:"
+          cat optimus7_ci_evidence/semantic_evidence.pretty.json
