@@ -1,0 +1,13 @@
+{
+  "verified_list": [
+    "lean/ACICorpusCore_1790386130_v2.lean",
+    "lean/ACICorpusCore_1790386473_v2.lean",
+    "lean/ACIFormalCore_v2.lean",
+    "lean/ACIMegaCore_1790387842.lean",
+    "lean/ACIRecursiveCore_1790387036_v2.lean",
+    "lean/ACISignedCore_1790385282_v2.lean",
+    "lean/ACISignedCore_1790385887_v2.lean",
+    "lean/ACISynthesisCore_1790384450_v2.lean"
+  ],
+  "total_active_modules": 8
+}

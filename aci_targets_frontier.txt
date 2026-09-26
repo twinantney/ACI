@@ -1,0 +1,11 @@
+# ACI Sovereign - Frontier Queue (9 Modules)
+# Status: Isolated for incremental hardening and zero-sorry verification
+PrimeMasterEngine
+PhaseTransitions
+DifferentialGeometry
+AlgebraicTopology
+LieTheory
+LogicModelTheory
+CategoryTheoryAdvanced
+ControlTheoryAdvanced
+FSI
