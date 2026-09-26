@@ -1,4 +1,3 @@
-import ACIMasterCorpus
 namespace ACI.ACICorpusCore_1790386473_v2
 open ACI.MasterCorpus
 
@@ -6,7 +5,6 @@ open ACI.MasterCorpus
 -- PRESERVED HISTORICAL DNA FROM: ACICorpusCore_1790386473
 -- ============================================================================
 
-import ACIMasterCorpus
 namespace ACI.ACICorpusCore_1790386473
 open ACI.MasterCorpus
 

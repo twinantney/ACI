@@ -7,7 +7,6 @@ package "my_project" where
 
 require mathlib from git "https://github.com/leanprover-community/mathlib4" @ "v4.31.0"
 
-lean_lib ACIMasterCorpus
 lean_lib AntaresCategory
 lean_lib PhysicsCore
 lean_lib SpineLanguage

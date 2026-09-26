@@ -1,4 +1,3 @@
-import ACIMasterCorpus
 namespace ACI.ACICorpusCore_1790386473
 open ACI.MasterCorpus
 
