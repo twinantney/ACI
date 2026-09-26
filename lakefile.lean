@@ -103,6 +103,17 @@ lean_lib AdditiveNumberTheory
 lean_lib DiscreteMathematics
 lean_lib AWM_NS_Master
 lean_lib ACIMegaCore_1790387842
+lean_lib ACIFormalCore_v2
+lean_lib ACISynthesisCore_1790384450_v2
+lean_lib ACISignedCore_1790385282_v2
+lean_lib ACISignedCore_1790385887_v2
+lean_lib ACICorpusCore_1790386130_v2
+lean_lib ACICorpusCore_1790386473_v2
+lean_lib ACIRecursiveCore_1790387036_v2
+lean_lib ACIMegaCore_1790392608
+lean_lib ACIMegaCore_1790393333
+lean_lib ACIMegaCore_1790393390
+lean_lib ACIMegaCore_1790395136
 
 @[default_target]
 lean_lib AWM21
