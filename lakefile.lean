@@ -111,6 +111,7 @@ lean_lib ACICorpusCore_1790386130_v2
 lean_lib ACICorpusCore_1790386473_v2
 lean_lib ACIRecursiveCore_1790387036_v2
 lean_lib ACIMegaCore_1790392608
+lean_lib ACIMegaCore_1790408288
 
 @[default_target]
 lean_lib AWM21
