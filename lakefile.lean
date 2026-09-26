@@ -7,6 +7,7 @@ package "my_project" where
 
 require mathlib from git "https://github.com/leanprover-community/mathlib4" @ "v4.31.0"
 
+lean_lib ACIMasterCorpus
 lean_lib AntaresCategory
 lean_lib PhysicsCore
 lean_lib SpineLanguage
@@ -27,8 +28,6 @@ lean_lib Optimus7Quantum
 lean_lib QuantumCore
 lean_lib EnergyDomain
 lean_lib VerifyState
-lean_lib ACI_Governance
-lean_lib PrimeMasterEngine
 lean_lib InformationGeometry
 lean_lib NumberTheoryCore
 lean_lib OptimalControl
@@ -46,10 +45,7 @@ lean_lib WaveletAnalysis
 lean_lib CompressedSensing
 lean_lib GameTheory
 lean_lib QuantumErrorCorrection
-lean_lib PhaseTransitions
 lean_lib FunctionalAnalysis
-lean_lib DifferentialGeometry
-lean_lib AlgebraicTopology
 lean_lib MeasureTheory
 lean_lib AbstractAlgebra
 lean_lib NumberTheory
@@ -60,11 +56,8 @@ lean_lib RepresentationTheory
 lean_lib DynamicalSystems
 lean_lib Combinatorics
 lean_lib ComplexAnalysis
-lean_lib LieTheory
 lean_lib AlgebraicGeometry
-lean_lib LogicModelTheory
 lean_lib SetTheory
-lean_lib CategoryTheoryAdvanced
 lean_lib TopologyAdvanced
 lean_lib LinearAlgebra
 lean_lib ProbabilityTheory
@@ -89,7 +82,6 @@ lean_lib AcousticsWaves
 lean_lib AtomicMolecularPhysics
 lean_lib FunctionalEquations
 lean_lib SignalProcessing
-lean_lib ControlTheoryAdvanced
 lean_lib ComputationalComplexity
 lean_lib FormalLanguageTheory
 lean_lib OptimizationTheory
@@ -109,8 +101,8 @@ lean_lib ArithmeticGeometry
 lean_lib AnalyticNumberTheory
 lean_lib AdditiveNumberTheory
 lean_lib DiscreteMathematics
-lean_lib FSI
 lean_lib AWM_NS_Master
+lean_lib ACIMegaCore_1790387842
 
 @[default_target]
 lean_lib AWM21
