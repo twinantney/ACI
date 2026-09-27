@@ -114,6 +114,7 @@ lean_lib ACIMegaCore_1790393333
 lean_lib ACIMegaCore_1790393390
 lean_lib ACIMegaCore_1790395136
 lean_lib ACIMegaCore_1790408288
+lean_lib AlgebraicTopology
 
 @[default_target]
 lean_lib AWM21
