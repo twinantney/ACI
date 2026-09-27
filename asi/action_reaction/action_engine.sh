@@ -1,0 +1,42 @@
+#!/bin/bash
+
+BASE="$HOME/SECURITY_SYSTEM_TEST"
+
+STATE="$BASE/core/security_state.conf"
+DECISION="$BASE/asi/decision"
+
+echo "ASI ACTION / REACTION ENGINE ONLINE"
+
+if [ -f "$STATE" ]; then
+
+CURRENT=$(grep SYSTEM_STATE "$STATE" | cut -d'=' -f2)
+
+echo "CURRENT STATE: $CURRENT"
+
+case "$CURRENT" in
+
+EMERGENCY_LOCK)
+echo "REACTION: INITIATE RECOVERY REVIEW"
+;;
+
+UNLOCKED)
+echo "REACTION: NORMAL MONITORING"
+;;
+
+LOCKED)
+echo "REACTION: RESTRICTED ACCESS REVIEW"
+;;
+
+*)
+echo "REACTION: UNKNOWN CONDITION"
+;;
+
+esac
+
+else
+
+echo "STATE UNAVAILABLE"
+
+fi
+
+echo "ACTION / REACTION ANALYSIS COMPLETE"
