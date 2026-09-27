@@ -205,7 +205,6 @@ jobs:
           ACIMegaCore_1790393333
           ACIMegaCore_1790393390
           ACIMegaCore_1790395136
-ACIMegaCore_1790395136
           AlgebraicTopolog
           EOC
 
@@ -249,49 +248,3 @@ ACIMegaCore_1790395136
 
           echo "========================================"
 
-      - name: Generate OPTIMUS7 semantic evidence
-        if: always()
-        run: |
-          set -u
-          mkdir -p optimus7_ci_evidence
-          echo "=== OPTIMUS7 SEMANTIC EVIDENCE ==="
-          {
-            echo "{"
-            echo "  \"schema\": \"OPTIMUS7-CI-EVIDENCE-001\","
-            echo "  \"commit\": \"${GITHUB_SHA}\","
-            echo "  \"run_id\": \"${GITHUB_RUN_ID}\","
-            echo "  \"repository\": \"${GITHUB_REPOSITORY}\","
-            echo "  \"ref\": \"${GITHUB_REF}\","
-            echo "  \"lean_toolchain\": \"$(tr -d '\n' < lean-toolchain)\","
-            echo "  \"modules\": ["
-          } > optimus7_ci_evidence/semantic_evidence.json
-
-          FIRST=1
-          for f in *.lean; do
-            [ -f "$f" ] || continue
-            SHA=$(sha256sum "$f" | awk '{print $1}')
-            LINES=$(wc -l < "$f" | tr -d ' ')
-            if [ "$FIRST" -eq 0 ]; then
-              echo "," >> optimus7_ci_evidence/semantic_evidence.json
-            fi
-            FIRST=0
-            printf '    {"file":"%s","sha256":"%s","lines":%s}' \
-              "$f" "$SHA" "$LINES" \
-              >> optimus7_ci_evidence/semantic_evidence.json
-          done
-
-          cat >> optimus7_ci_evidence/semantic_evidence.json <<'EOC'
-          ]
-          }
-          EOC
-
-          python3 -m json.tool \
-            optimus7_ci_evidence/semantic_evidence.json \
-            > optimus7_ci_evidence/semantic_evidence.pretty.json
-
-          sha256sum optimus7_ci_evidence/semantic_evidence.json \
-            > optimus7_ci_evidence/semantic_evidence.sha256
-
-          echo
-          echo "Evidence generated:"
-          cat optimus7_ci_evidence/semantic_evidence.pretty.json
