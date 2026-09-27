@@ -205,6 +205,8 @@ jobs:
           ACIMegaCore_1790393333
           ACIMegaCore_1790393390
           ACIMegaCore_1790395136
+ACIMegaCore_1790395136
+          AlgebraicTopolog
           EOC
 
           sed -i 's/^[[:space:]]*//' /tmp/candidate_modules.txt
