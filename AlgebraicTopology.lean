@@ -4,9 +4,7 @@ namespace AlgebraicTopology
 
 open Finset Real
 
--- ============================================================
 -- SECTION 1: FUNDAMENTAL GROUP
--- ============================================================
 
 structure Loop (n : ℕ) where
   base   : Fin n → ℝ
@@ -39,15 +37,10 @@ noncomputable def loop_reverse (n : ℕ)
 
 theorem reverse_reverse (n : ℕ) (f : Loop n) :
     (loop_reverse n (loop_reverse n f)).path =
-    f.path := by
+      f.path := by
   ext t i; simp [loop_reverse]
 
-noncomputable def winding_number (f : ℝ → ℝ) : ℤ :=
-  Int.ofNat 0
-
--- ============================================================
 -- SECTION 2: COVERING SPACES
--- ============================================================
 
 structure CoveringMap (n : ℕ) where
   total_space : Fin n → ℝ → ℝ
@@ -84,9 +77,7 @@ theorem deck_compose (n : ℕ)
        simp [d1.right_inv, d2.right_inv] },
    fun x i => rfl⟩
 
--- ============================================================
--- SECTION 3: SINGULAR HOMOLOGY
--- ============================================================
+-- SECTION 3: SINGULAR HOMOLOGY (chain-complex scaffold and simplex data)
 
 structure ChainComplex where
   C        : ℕ → ℕ
@@ -96,15 +87,6 @@ structure ChainComplex where
       Finset.univ.sum (fun rho : Fin (C n) =>
         boundary (n+1) sigma tau *
         boundary n tau rho)) = 0
-
-noncomputable def betti_number
-    (cc : ChainComplex) (n : ℕ) : ℕ := cc.C n
-
-noncomputable def euler_char_complex
-    (cc : ChainComplex) (N : ℕ) : ℤ :=
-  (Finset.range N).sum (fun n =>
-    if n % 2 = 0 then (cc.C n : ℤ)
-    else -(cc.C n : ℤ))
 
 structure Simplex (k : ℕ) where
   vertices : Fin (k+1) → ℝ
@@ -122,48 +104,10 @@ def edge_simplex (a b : ℝ) (h : a ≤ b) : Simplex 1 where
 
 theorem boundary_1simplex (a b : ℝ) (h : a ≤ b) :
     (edge_simplex a b h).vertices 1 -
-    (edge_simplex a b h).vertices 0 = b - a := by
+      (edge_simplex a b h).vertices 0 = b - a := by
   simp [edge_simplex]
 
--- ============================================================
--- SECTION 4: COHOMOLOGY AND DE RHAM
--- ============================================================
-
-structure CochainComplex where
-  C_dual     : ℕ → ℕ
-  coboundary : ∀ n, Fin (C_dual n) →
-                 Fin (C_dual (n+1)) → ℤ
-
-noncomputable def deRham_dim
-    (genus : ℕ) (k : ℕ) : ℕ :=
-  match k with
-  | 0 => 1
-  | 1 => 2 * genus
-  | 2 => 1
-  | _ => 0
-
-theorem deRham_H0 (genus : ℕ) :
-    deRham_dim genus 0 = 1 := rfl
-
-theorem deRham_H1_torus :
-    deRham_dim 1 1 = 2 := by unfold deRham_dim; norm_num
-
-theorem deRham_H2 (genus : ℕ) :
-    deRham_dim genus 2 = 1 := rfl
-
-theorem poincare_duality_2d (genus : ℕ) :
-    deRham_dim genus 0 = deRham_dim genus 2 := by
-  simp [deRham_dim]
-
-noncomputable def cup_product_dim (d1 d2 : ℕ) : ℕ :=
-  d1 * d2
-
-theorem cup_product_nonneg (d1 d2 : ℕ) :
-    0 ≤ cup_product_dim d1 d2 := Nat.zero_le _
-
--- ============================================================
--- SECTION 5: EXACT SEQUENCES
--- ============================================================
+-- SECTION 4: EXACT SEQUENCES
 
 structure ShortExactSequence where
   A B C   : ℕ
@@ -194,9 +138,7 @@ theorem mayer_vietoris_dim
     (h : H_AuB + H_AB ≤ H_A + H_B) :
     H_AuB ≤ H_A + H_B := by omega
 
--- ============================================================
--- SECTION 6: HOMOTOPY THEORY
--- ============================================================
+-- SECTION 5: HOMOTOPY THEORY
 
 def homotopic (n m : ℕ)
     (f g : (Fin n → ℝ) → Fin m → ℝ) : Prop :=
@@ -240,33 +182,7 @@ theorem Rn_contractible (n : ℕ) :
     fun x i => by simp,
     fun x i => by simp⟩
 
--- ============================================================
--- SECTION 7: FIBER BUNDLES
--- ============================================================
-
-structure FiberBundle (n k : ℕ) where
-  total     : ℕ := n + k
-  base_dim  : ℕ := n
-  fiber_dim : ℕ := k
-  projection : (Fin (n+k) → ℝ) → Fin n → ℝ
-  local_triv : ∀ p : Fin n → ℝ,
-    ∃ U : Fin n → ℝ → Prop, U p = fun _ => True
-
-def trivial_bundle (n k : ℕ) : FiberBundle n k where
-  projection := fun x => fun i => x ⟨i.val, by omega⟩
-  local_triv := fun p => ⟨fun _ _ => True, rfl⟩
-
-noncomputable def tangent_bundle_dim (n : ℕ) : ℕ :=
-  2 * n
-
-theorem tangent_bundle_double (n : ℕ) :
-    tangent_bundle_dim n = 2 * n := rfl
-
-noncomputable def euler_class_dim (n : ℕ) : ℕ := n
-
--- ============================================================
--- SECTION 8: K-THEORY
--- ============================================================
+-- SECTION 6: K-THEORY (rank and Chern-character additivity)
 
 structure KElement where
   pos_rank : ℕ
@@ -277,12 +193,9 @@ noncomputable def K_rank (e : KElement) : ℤ :=
 
 theorem K_rank_add (e1 e2 : KElement) :
     K_rank ⟨e1.pos_rank + e2.pos_rank,
-            e1.neg_rank + e2.neg_rank⟩ =
-    K_rank e1 + K_rank e2 := by
+        e1.neg_rank + e2.neg_rank⟩ =
+      K_rank e1 + K_rank e2 := by
   unfold K_rank; push_cast; ring
-
-theorem bott_period (n : ℕ) :
-    ∃ period : ℕ, period = 2 := ⟨2, rfl⟩
 
 noncomputable def chern_character_rank
     (e : KElement) : ℚ :=
@@ -290,15 +203,13 @@ noncomputable def chern_character_rank
 
 theorem chern_character_additive (e1 e2 : KElement) :
     chern_character_rank
-      ⟨e1.pos_rank + e2.pos_rank,
-       e1.neg_rank + e2.neg_rank⟩ =
-    chern_character_rank e1 +
-    chern_character_rank e2 := by
+        ⟨e1.pos_rank + e2.pos_rank,
+         e1.neg_rank + e2.neg_rank⟩ =
+      chern_character_rank e1 +
+      chern_character_rank e2 := by
   unfold chern_character_rank; push_cast; ring
 
--- ============================================================
--- SECTION 9: AWM ALGEBRAIC TOPOLOGY BRIDGE
--- ============================================================
+-- SECTION 7: AWM ALGEBRAIC TOPOLOGY BRIDGE
 
 inductive Domain21 : Type where
   | A_Energy | B_Control | C_Thermal | D_Structural
@@ -326,15 +237,15 @@ def full_AWM_complex : AWMComplex where
 
 theorem full_AWM_vertices :
     full_AWM_complex.vertices.card =
-    Fintype.card Domain21 := by
+      Fintype.card Domain21 := by
   simp [full_AWM_complex]
 
 def AWM_connected (awm : AWMComplex) : Prop :=
   awm.vertices.card > 0 ∧
-  ∀ d1 d2 : Domain21,
-    d1 ∈ awm.vertices → d2 ∈ awm.vertices →
-    ∃ path : List Domain21,
-      path.head? = some d1 ∧ path.getLast? = some d2
+    ∀ d1 d2 : Domain21,
+      d1 ∈ awm.vertices → d2 ∈ awm.vertices →
+        ∃ path : List Domain21,
+          path.head? = some d1 ∧ path.getLast? = some d2
 
 theorem full_AWM_connected :
     AWM_connected full_AWM_complex := by
@@ -349,32 +260,30 @@ theorem AWM_contractible
     awm.vertices.card = Fintype.card Domain21 := by
   simp [h]
 
-noncomputable def AWM_betti0
+noncomputable def AWM_active_count
     (active : Finset Domain21) : ℕ := active.card
 
-theorem AWM_betti0_pos (d : Domain21) :
-    0 < AWM_betti0 {d} := by
-  unfold AWM_betti0; simp
+theorem AWM_active_count_pos (d : Domain21) :
+    0 < AWM_active_count {d} := by
+  unfold AWM_active_count; simp
 
-theorem AWM_betti0_all :
-    AWM_betti0 Finset.univ =
-    Fintype.card Domain21 := by
-  unfold AWM_betti0; simp
+theorem AWM_active_count_all :
+    AWM_active_count Finset.univ =
+      Fintype.card Domain21 := by
+  unfold AWM_active_count; simp
 
-theorem AWM_connectivity_monotone
+theorem AWM_active_count_monotone
     (S T : Finset Domain21) (h : S ⊆ T) :
-    AWM_betti0 S ≤ AWM_betti0 T := by
-  unfold AWM_betti0; exact Finset.card_le_card h
+    AWM_active_count S ≤ AWM_active_count T := by
+  unfold AWM_active_count; exact Finset.card_le_card h
 
--- ============================================================
 -- SYSTEM LOCK
--- ============================================================
 
 structure AlgTopLock where
   loop_rev_rev    : ∀ (n : ℕ) (f : Loop n),
                       (loop_reverse n
                         (loop_reverse n f)).path =
-                      f.path
+                        f.path
   homotop_refl    : ∀ (n m : ℕ)
                       (f : (Fin n → ℝ) → Fin m → ℝ),
                       homotopic n m f f
@@ -390,23 +299,15 @@ structure AlgTopLock where
                       homotopic n m f h
   Rn_contract     : ∀ (n : ℕ),
                       is_contractible n (fun _ => 0)
-  deRham_H0       : ∀ (genus : ℕ),
-                      deRham_dim genus 0 = 1
-  deRham_H2       : ∀ (genus : ℕ),
-                      deRham_dim genus 2 = 1
-  poincare_dual   : ∀ (genus : ℕ),
-                      deRham_dim genus 0 =
-                      deRham_dim genus 2
   SES_euler       : ∀ (ses : ShortExactSequence),
                       (ses.A : ℤ) - ses.B + ses.C = 0
-  bott_period     : ∃ p : ℕ, p = 2
-  AWM_b0_pos      : ∀ (d : Domain21),
-                      0 < AWM_betti0 {d}
-  AWM_b0_all      : AWM_betti0 Finset.univ =
+  AWM_count_pos   : ∀ (d : Domain21),
+                      0 < AWM_active_count {d}
+  AWM_count_all   : AWM_active_count Finset.univ =
                       Fintype.card Domain21
   AWM_mono        : ∀ (S T : Finset Domain21),
                       S ⊆ T →
-                      AWM_betti0 S ≤ AWM_betti0 T
+                      AWM_active_count S ≤ AWM_active_count T
   full_connected  : AWM_connected full_AWM_complex
 
 def ATLock : AlgTopLock where
@@ -415,14 +316,10 @@ def ATLock : AlgTopLock where
   homotop_symm    := homotopic_symm
   homotop_trans   := homotopic_trans
   Rn_contract     := Rn_contractible
-  deRham_H0       := deRham_H0
-  deRham_H2       := deRham_H2
-  poincare_dual   := poincare_duality_2d
   SES_euler       := SES_euler_zero
-  bott_period     := bott_period 0
-  AWM_b0_pos      := AWM_betti0_pos
-  AWM_b0_all      := AWM_betti0_all
-  AWM_mono        := AWM_connectivity_monotone
+  AWM_count_pos   := AWM_active_count_pos
+  AWM_count_all   := AWM_active_count_all
+  AWM_mono        := AWM_active_count_monotone
   full_connected  := full_AWM_connected
 
 end AlgebraicTopology
