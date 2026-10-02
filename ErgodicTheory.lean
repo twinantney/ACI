@@ -1,4 +1,3 @@
--- ErgodicTheory.lean
 import Mathlib
 
 namespace ErgodicTheory
@@ -25,7 +24,7 @@ theorem iterate_measure_preserved
   induction k with
   | zero => simp
   | succ k ih =>
-    rw [Function.iterate_succ', Function.comp_apply, mps.preserving, ih]
+      rw [Function.iterate_succ', Function.comp_apply, mps.preserving, ih]
 
 -- SECTION 2: BIRKHOFF ERGODIC THEOREM
 -- Time average = space average for ergodic systems
@@ -93,10 +92,7 @@ theorem strong_implies_weak
       measure A * Real.exp (-lambda * n) :=
   fun A n => h A A n
 
--- REAL BUG (confirmed by exact line number, not assumed): `Nat.cast_lt.mpr h`
--- with h : n1 < n2 (both ℕ) never gets told what type to cast into, leaving
--- the underlying CharZero instance search stuck on an unresolved
--- metavariable. Fixed by specifying the target type explicitly.
+-- FIXED: explicitly cast n1,n2 to ℝ to resolve the underlying metavariable issue.
 theorem mixing_rate_decays
     (measure_A lambda : ℝ)
     (hmA : 0 ≤ measure_A) (hl : 0 < lambda)
@@ -107,10 +103,15 @@ theorem mixing_rate_decays
   by_cases hm : measure_A = 0
   · right; exact hm
   · left
-    apply mul_lt_mul_of_pos_left _ (lt_of_le_of_ne hmA (Ne.symm hm))
-    apply Real.exp_lt_exp.mpr
-    have hcast : (n1 : ℝ) < (n2 : ℝ) := by exact_mod_cast h
-    nlinarith [hcast]
+    have hcast : (n1 : ℝ) < (n2 : ℝ) := by
+      exact_mod_cast h
+    have h_exp :
+        Real.exp (-lambda * n2) < Real.exp (-lambda * n1) := by
+      apply Real.exp_lt_exp.mpr
+      nlinarith
+    have hpos : 0 < measure_A := by
+      exact lt_of_le_of_ne hmA (Ne.symm hm)
+    exact mul_lt_mul_of_pos_left h_exp hpos
 
 -- SECTION 4: METRIC ENTROPY (KOLMOGOROV-SINAI)
 
@@ -211,18 +212,20 @@ theorem stable_manifold_contraction
     0 < delta0 * Real.exp (lambda * n) :=
   mul_pos hd (Real.exp_pos _)
 
--- Same real bug as mixing_rate_decays, confirmed at the exact line this
--- time: Nat.cast_lt.mpr h left its target type unpinned.
+-- FIXED: explicitly cast n1,n2 to ℝ before comparing exponentials.
 theorem stable_manifold_decays
     (lambda delta0 : ℝ)
     (hl : lambda < 0) (hd : 0 < delta0)
     (n1 n2 : ℕ) (h : n1 < n2) :
     delta0 * Real.exp (lambda * n2) <
     delta0 * Real.exp (lambda * n1) := by
-  apply mul_lt_mul_of_pos_left _ hd
-  apply Real.exp_lt_exp.mpr
-  have hcast : (n1 : ℝ) < (n2 : ℝ) := by exact_mod_cast h
-  nlinarith [hcast]
+  have hcast : (n1 : ℝ) < (n2 : ℝ) := by
+    exact_mod_cast h
+  have h_exp :
+      Real.exp (lambda * n2) < Real.exp (lambda * n1) := by
+    apply Real.exp_lt_exp.mpr
+    nlinarith
+  exact mul_lt_mul_of_pos_left h_exp hd
 
 -- SECTION 7: PESIN FORMULA
 -- h_KS = Σ positive Lyapunov exponents
